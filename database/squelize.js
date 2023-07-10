@@ -1,8 +1,8 @@
 const mysql =require("mysql2")
 
-const sequelize=require("sequelize");
+const Sequelize=require("sequelize");
 
-const sequelize=new ('expense','root','anshulme96@',{ dialect:'mysql',host:'localhost'});
+const sequelize=new Sequelize('expense','root','anshulme96@',{ dialect:'mysql',host:'localhost'});
 
 const checkConnection=async ()=>{
     try{

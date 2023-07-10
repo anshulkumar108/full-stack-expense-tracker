@@ -3,15 +3,18 @@ const app=express();
 var cors=require('cors')
 app.use(cors())
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.json({extended:true}));
-
-const {sequelize}=require('./database/sequelize');
+const {sequelize}=require('./database/squelize');
 const {Expense}=require('./model/expModel');
+const expenseRoutes=require('./router/router')
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({extended:false}));
 
+app.use(express.static('./frontEnd/expense'));
+
+
+app.use('/',expenseRoutes)
 sequelize.sync().then((result)=>{
-
-    app.listen(4000);
+    app.listen(5000);
     
     }).catch((err)=>{
         console.log(err)
