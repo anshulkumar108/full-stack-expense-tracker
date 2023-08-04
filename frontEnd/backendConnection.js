@@ -53,15 +53,15 @@ async function fetchExpenseList(){
 }
 
 async function showExpense(expense) {
-    console.log("3" + expense)
     try {
         var li = document.createElement("li");
         li.id = expense.id;
-        li.innerHTML = `Amount: <span class="editable" contenteditable="true">${expense.amount}</span>,
-    Description: <span class="editable" contenteditable="true">${expense.description}</span>,
-    Category: <span class="editable" contenteditable="true">${expense.category}</span>
-    <button class="delete" onclick="Delete(event)">DELETE</button>
-    <button class="edit" onclick="Edit(event)">EDIT</button>`;
+    //     li.innerHTML = `Amount: <span class="editable" contenteditable="true">${expense.amount}</span>,
+    // Description: <span class="editable" contenteditable="true">${expense.description}</span>,
+    // Category: <span class="editable" contenteditable="true">${expense.category}</span>
+    // <button class="delete" onclick="Delete(event)">DELETE</button>
+    // <button class="edit" onclick="Edit(event)">EDIT</button>`;
+    
 
         ul.appendChild(li);
         // Add event listeners for editing
