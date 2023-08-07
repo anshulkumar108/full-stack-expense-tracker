@@ -13,6 +13,7 @@ document.getElementById('signUpForm').addEventListener('submit', async (e) => {
             Email: e.target.email.value.trim(),
             Password: e.target.password.value,
         };
+        
         clearInput();
         try {
             const response = await axios.post('http://localhost:5000/users/signup', SignupDetails)

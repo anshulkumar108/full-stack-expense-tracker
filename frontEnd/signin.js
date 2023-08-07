@@ -17,9 +17,9 @@ document.getElementById('signinForm').addEventListener('submit', async (e) => {
             const response = await axios.post('http://localhost:5000/users/signin', SigninDetails)
             if (response.status == 201) {
                 window.location.href = "./signup.html"
-                alert('login successful')
+                alert(response.data.message);
             } else {
-                alert('failed to login')
+                alert(response.data.message)
 
             }
 
