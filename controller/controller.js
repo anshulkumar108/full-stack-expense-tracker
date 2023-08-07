@@ -1,5 +1,4 @@
 const {Expense}=require('../model/expModel');
-const {login}=require('../model/login');
 
 const  getUser = async (req, res, next) =>{
     try {
@@ -59,27 +58,12 @@ const addUser=async(req,res,next)=>{
     }
 }
 
-const loginUser=async(req,res,next)=>{
-  try {
-     const {Name,Email,Password}=req.body
-     const userdetails= await login.create({name:Name,email:Email,password:Password})
-     console.log(userdetails)
-     res.status(200).json({userdetails});
-  } catch (error) {
-    console.log(error);
-  }
-  
-}
 
-const loginUserDetails=async(req,res,next)=>{
-
-}
 
 module.exports={
     getUser,
     deleteUser,
     addUser,
     updateUser,
-    loginUserDetails,
-    loginUser
+    
 }
