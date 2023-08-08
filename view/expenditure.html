@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expense tracker</title>
+</head>
+<body>
+    <div class="expense">
+        <form action="" class="expenseDetails">
+            <div>
+                <span><ion-icon name="wallet-outline"></ion-icon></span>
+                <label for="amount">Amount</label>
+                <input type="text"  id="Amount" placeholder="Enter spend Amount" required>
+            </div>
+           
+            <div>
+                <span><ion-icon name="newspaper-outline"></ion-icon></span>
+                <label for="description">Description</label>
+                <input type="text"  id="Description" placeholder="describe details " required>
+            </div>
+
+            <div>
+                <span><ion-icon name="list"></ion-icon></span>
+                <label for="Category">Category</label>
+                <select name="Category" id="Category">
+                    <option value="Select"></option>
+                    <option value="Rent">RENT</option>
+                    <OPtion value="Transportation">Travel</OPtion>
+                    <option value="Bill">Bill</option>
+                    <option value="EMI">EMI</option>
+                    <option value="Movie">Movie</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="other">other</option>
+                </select>
+            </div>
+            <button type="submit" id="submit">Add expense</button>
+
+        </form>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="expenditure.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</html>

@@ -3,9 +3,6 @@ const {Expense}=require('../model/expModel');
 const  getUser = async (req, res, next) =>{
     try {
        let usersDetails = await Expense.findAll();
-      //  console.log('1')
-      //   console.log(usersDetails)
-      //   console.log('2')
         res.status(200).json({ usersDetails });
     } catch (error) {
         console.log(error)

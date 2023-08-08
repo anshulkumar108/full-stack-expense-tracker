@@ -6,6 +6,7 @@ app.use(cors())
 const {sequelize}=require('./database/squelize');
 const {Expense}=require('./model/expModel');
 const expenseRoutes=require('./router/router')
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({extended:false}));
 
