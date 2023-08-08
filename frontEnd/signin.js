@@ -18,18 +18,14 @@ document.getElementById('signinForm').addEventListener('submit', async (e) => {
             if (response.status == 201) {
                 window.location.href = "./signup.html"
                 alert(response.data.message);
-            } else {
-                alert(response.data.message)
-
+            } else if (response.status == 402){
+                alert('Wrong password')
+            }else{
+                alert('Wrong email ID')
             }
-
         } catch (error) {
             console.log(error);
-            // window.location.href = "./signup.html"
-          alert('user is not registered or passowrd is wrong')
         }
-    
-
     }
 })
 
