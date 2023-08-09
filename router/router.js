@@ -15,5 +15,6 @@ router.post('/users/signin',userController.Usersignin)
 
 router.post('/users/addExpense',expenditureController.addExpense)
 router.get('/users/fetchExpenseDetails',expenditureController.fetchExpense)
+router.delete('/users/deleteExpense/:id',expenditureController.deleteExpense)
 
 module.exports=router;
