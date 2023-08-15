@@ -2,7 +2,7 @@ const {Sequelize,DataTypes }=require('sequelize');
 
 const {sequelize}=require('../database/squelize')
 
-const Expense=sequelize.define('expense',{
+const Expense=sequelize.define('expenses',{
 
     id:{
         type:DataTypes.INTEGER,

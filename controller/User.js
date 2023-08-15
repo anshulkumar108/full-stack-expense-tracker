@@ -1,60 +1,71 @@
 const { User } = require('../model/login')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 const Usersignup = async (req, res, next) => {
   try {
-    const { Email } = req.body;
-    const email = await User.findOne({ where: { email: Email } });
-    if (email) {
-      res.status(404);
-      console.log('email id alrady exists')
+    //Existing user check
+    const { Name, Email, Password } = req.body;
+    const existingUser = await User.findOne({ where: { email: Email } });
+    if (existingUser) {
+      return res.status(404).json({ message: "user already exists" });
     } else {
-      const { Name, Email, Password } = req.body
 
-      // @param data — The data to be encrypted.
-
-      // @param saltOrRounds
-      // The salt to be used in encryption. If specified as a number then a salt will be generated with the specified number of rounds and used.
-
-      // @return — A promise to be either resolved with the encrypted data salt or rejected with an Error
+      //hased password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(Password, saltRounds);
 
-      const userdetails = await User.create({ name: Name, email: Email, password: hashedPassword })
-      console.log(userdetails)
-      res.status(201).json({ userdetails });
-    }
+      //user creation
+      if (Name === null || Email === null || Password === null) {
+        return res.status(500).json({ message: "check all input details are filled? " });
+      } else {
 
+        const userdetails = await User.create({
+          name: Name,
+          email: Email,
+          password: hashedPassword
+        });
+        console.log(userdetails)
+        // const token = jwt.sign({ email: userdetails.email, id: userdetails.id }, 'secretKey');
+        // console.log(token)
+        res.status(201).json({ user: userdetails })
+      }
+    }
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: 'something went wrong' })
   }
 
 }
 
+function generateAccessToken(id) {
+  return jwt.sign({ userId: id }, 'secretKey');
+}
+
+
 const Usersignin = async (req, res, next) => {
 
+  const { Email, Password, id } = req.body;
+
   try {
-    const { Email, Password } = req.body;
-    console.log(Password)
-    const user = await User.findOne({ where: { email: Email } });
 
-    if (!user) {
+    const existingUser = await User.findOne({ where: { email: Email } });
+    if (!existingUser) {
       res.status(404).json({ message: 'Email ID does not exist' })
-      console.log('email id does not exists')
-
-    } else {
-      const userPassword = Password;
-      const isPasswordValid = await bcrypt.compare(Password, user.password);
-
-      console.log(isPasswordValid)
-
-      if (!isPasswordValid) {
-        res.status(402).json({ message: 'Wrong password' });
-      } else {
-        res.status(201).json({ message: "you log in successful" })
-        console.log("you log in successful")
-      }
     }
+
+    const isPasswordValid = await bcrypt.compare(Password, existingUser.password);
+
+    if (!isPasswordValid) {
+      return res.status(402).json({ message: 'Wrong password' });
+    }
+
+    const token = generateAccessToken(existingUser.id)
+
+    res.status(201).json({ user: existingUser, token: token })
+    console.log("you log in successful")
+
 
   } catch (error) {
     console.log(error);
@@ -64,5 +75,5 @@ const Usersignin = async (req, res, next) => {
 
 module.exports = {
   Usersignup,
-  Usersignin
+  Usersignin,
 }

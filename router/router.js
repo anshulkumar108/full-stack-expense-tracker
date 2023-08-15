@@ -1,20 +1,19 @@
 const express = require("express");
-const router=express.Router();
-const expenseController=require('../controller/controller')
-const userController=require('../controller/User')
-const expenditureController=require('../controller/expenseController')
+const router = express.Router();
 
-router.get('/getusers',expenseController.getUser)
-router.post('/postusers',expenseController.addUser)
-router.delete('/:id',expenseController.deleteUser)
-router.put('/:id',expenseController.updateUser)
+const userController = require('../controller/User')
+const expenditureController = require('../controller/expenseController');
+const authenticate = require('../middleware/auth.js');
 
-// router.get('/user',expenseController.loginUserDetails)
+
+
+//user  signin and singup routes
 router.post('/users/signup',userController.Usersignup)
 router.post('/users/signin',userController.Usersignin)
 
-router.post('/users/addExpense',expenditureController.addExpense)
-router.get('/users/fetchExpenseDetails',expenditureController.fetchExpense)
-router.delete('/users/deleteExpense/:id',expenditureController.deleteExpense)
+//expense controller routes
+router.post('/users/addExpense', authenticate,expenditureController.addExpense)
+router.get('/users/fetchExpenseDetails', authenticate, expenditureController.fetchExpense)
+router.delete('/users/deleteExpense/:id', expenditureController.deleteExpense)
 
-module.exports=router;
+module.exports = router;
