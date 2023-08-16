@@ -2,13 +2,14 @@ const amount = document.getElementById('Amount');
 const description = document.getElementById('Description');
 const category = document.getElementById('Category');
 
-window.addEventListener('DOMContentLoaded',async ()=>{
-    const token=localStorage.getItem('accessToken');
-    const response=await axios.get('http://localhost:5000/users/fetchExpenseDetails',{ headers: {"Authorization" : token} })
-        const expensedetails=response.data.Details;
-        expensedetails.forEach(expense => {
-            fetchExpenseList(expense);
-        });
+window.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('accessToken');
+    const response = await axios.get('http://localhost:5000/users/fetchExpenseDetails', { headers: { "Authorization": token } })
+    const expensedetails = response.data.Details;
+    console.log(expensedetails)
+    expensedetails.forEach(expense => {
+        fetchExpenseList(expense);
+    });
 });
 
 
@@ -23,19 +24,16 @@ document.getElementById('submit').addEventListener('click', async (e) => {
     }
     console.log(ExpenseDetails);
     try {
-        const token=localStorage.getItem('accessToken')
+        const token = localStorage.getItem('accessToken')
         const response = await axios.post(
             'http://localhost:5000/users/addExpense',
             ExpenseDetails,
             {
                 headers: {
-                  "Authorization": token
+                    "Authorization": token
                 }
-              }
-          );
-          
-        // const token=localStorage.setItem('token', response.data.token)
-        // console.log(token);
+            }
+        );
         fetchExpenseList(response.data.PostData)
     } catch (error) {
         console.log(error);
@@ -43,12 +41,12 @@ document.getElementById('submit').addEventListener('click', async (e) => {
 
 })
 
-async function fetchExpenseList(expensedetails){
+async function fetchExpenseList(expensedetails) {
     try {
         console.log(expensedetails);
-        const ul=document.getElementById('listOfExpense');
-            const ExpenseId=expensedetails.id;
-              ul.innerHTML +=`<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
+        const ul = document.getElementById('listOfExpense');
+        const ExpenseId = expensedetails.id;
+        ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
               <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>
               </li>`
     } catch (error) {
@@ -65,10 +63,18 @@ async function deleteExpense(event,ExpenseId){
             console.log('Expense ID is missing');
             return;
           }
-        
-        const response=await axios.delete(`http://localhost:5000/users/deleteExpense/${ExpenseId}`)
-
-        expenseElement.remove();
+        const token = localStorage.getItem('accessToken');
+        const response=await axios.delete(`http://localhost:5000/users/deleteExpense/${ExpenseId}`,{
+                            headers: {
+                                "Authorization": token
+                            }
+                        });
+                        if(response.status==201){
+                            expenseElement.remove();
+                        }else{
+                            alert('you are not authorized user')
+                        }
+       
 } catch (error) {
     console.log(error);
 }

@@ -12,8 +12,8 @@ router.post('/users/signup',userController.Usersignup)
 router.post('/users/signin',userController.Usersignin)
 
 //expense controller routes
-router.post('/users/addExpense', authenticate,expenditureController.addExpense)
-router.get('/users/fetchExpenseDetails', authenticate, expenditureController.fetchExpense)
-router.delete('/users/deleteExpense/:id', expenditureController.deleteExpense)
+router.post('/users/addExpense',authenticate,expenditureController.addExpense)
+router.get('/users/fetchExpenseDetails/',authenticate, expenditureController.fetchExpense)
+router.delete('/users/deleteExpense/:id',authenticate,expenditureController.deleteExpense)
 
 module.exports = router;

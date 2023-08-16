@@ -7,7 +7,7 @@ async function userauthenticate(req, res, next) {
     if (!token) {
         return res.status(401).json({ message: "Unauthorized users" });
     }
-    const user = jwt.verify(token, 'secretKey');
+    const user = jwt.verify(token, 'secret');
     //output of this above line is  { userId: 2, iat: 1692093001 }
     console.log("userId>>>>>>",user.userId);
   

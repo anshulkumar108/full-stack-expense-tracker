@@ -40,13 +40,13 @@ const Usersignup = async (req, res, next) => {
 }
 
 function generateAccessToken(id) {
-  return jwt.sign({ userId: id }, 'secretKey');
+  return jwt.sign({ userId: id }, 'secret');
 }
 
 
 const Usersignin = async (req, res, next) => {
 
-  const { Email, Password, id } = req.body;
+  const { Email, Password} = req.body;
 
   try {
 
