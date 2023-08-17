@@ -1,3 +1,4 @@
+
 const amount = document.getElementById('Amount');
 const description = document.getElementById('Description');
 const category = document.getElementById('Category');
@@ -6,7 +7,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('accessToken');
     const response = await axios.get('http://localhost:5000/users/fetchExpenseDetails', { headers: { "Authorization": token } })
     const expensedetails = response.data.Details;
-    console.log(expensedetails)
     expensedetails.forEach(expense => {
         fetchExpenseList(expense);
     });
@@ -57,7 +57,6 @@ async function fetchExpenseList(expensedetails) {
 
 async function deleteExpense(event,ExpenseId){
     let expenseElement = event.target.parentElement;
-    console.log( expenseElement);
     try {
         if (ExpenseId === undefined) {
             console.log('Expense ID is missing');
@@ -80,3 +79,38 @@ async function deleteExpense(event,ExpenseId){
 }
     
 }
+
+document.getElementById('Premium').addEventListener('click',async(e)=>{
+    const token = localStorage.getItem('accessToken');
+    const response = await axios.get('http://localhost:5000/api/purchaseMember', { headers: { "Authorization": token } })
+    console.log(response.data.order)
+    var options =
+    {
+     "key": response.data.key_id, // Enter the Key ID generated from the Dashboard
+     "order_id": response.data.order.id,// For one time payment
+     // This handler function will handle the success payment
+     "handler": async function (response) {
+        const res = await axios.post('http://localhost:5000/api/updatetransactionstatus',{
+             order_id: options.order_id,
+             payment_id: response.razorpay_payment_id,
+         }, { headers: {"Authorization" : token} })
+        
+        console.log(options)
+         alert('You are a Premium User Now')
+         document.getElementById('Premium').style.visibility = "hidden"
+         document.getElementById('message').innerHTML = "You are a premium user "
+
+     },
+  };
+  const rzp1 = new Razorpay(options);
+  rzp1.open();
+  e.preventDefault();
+
+  rzp1.on('payment.failed', function (response){
+    console.log(response)
+    alert('Something went wrong')
+  })
+});
+
+
+

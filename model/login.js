@@ -23,7 +23,7 @@ const User = sequelize.define('userdetails', {
         type: DataTypes.STRING,
         allownull: false,
     },
-   
+    isPremimum:DataTypes.BOOLEAN,
 
 })
 

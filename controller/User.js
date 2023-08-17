@@ -11,7 +11,6 @@ const Usersignup = async (req, res, next) => {
     if (existingUser) {
       return res.status(404).json({ message: "user already exists" });
     } else {
-
       //hased password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(Password, saltRounds);
@@ -26,9 +25,7 @@ const Usersignup = async (req, res, next) => {
           email: Email,
           password: hashedPassword
         });
-        console.log(userdetails)
-        // const token = jwt.sign({ email: userdetails.email, id: userdetails.id }, 'secretKey');
-        // console.log(token)
+        // console.log(userdetails)
         res.status(201).json({ user: userdetails })
       }
     }

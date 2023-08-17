@@ -5,7 +5,7 @@ const addExpense=async (req,res,next)=>{
  try {
     const {Amount,Description,Category}=req.body;
     const PostData=await Expense.create({ amount:Amount,description:Description, category:Category , userdetailId:req.user.id,authenticate})
-  console.log(">>>>",PostData ,">>>>>.")  
+//   console.log(">>>>",PostData ,">>>>>.")  
     res.status(201).json({PostData})
 
  } catch (error) {
@@ -15,9 +15,9 @@ const addExpense=async (req,res,next)=>{
 }
 const fetchExpense=async(req,res,next)=>{
     try {
-        const Details=await Expense.findAll({id:req.user.id});
+        const Details=await Expense.findAll( {where :{userdetailId:req.user.id}});
         res.status(201).json({Details})  
-        console.log(Details) 
+        // console.log(Details) 
     } catch (error) {
         console.log(error);
         res.status(404).json({message:"failed to fetch details"})

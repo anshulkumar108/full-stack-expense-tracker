@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.1",
     "mysql2": "^3.3.5",
     "nodemon": "^2.0.22",
+    "razorpay": "^2.9.1",
     "sequelize": "^6.32.0"
   }
 }
