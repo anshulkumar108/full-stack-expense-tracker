@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>expense tracker</title>
 </head>
-<body>
+<body id="app">
     <div class="expense">
         <form action="" class="expenseDetails">
             <div>
@@ -39,12 +39,20 @@
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         </form>
     </div>
-    <div id="message"></div>
+    <div id="message"> </div>
+    <!-- <button type="menu" id="board">Show LeaderBoard</button> -->
+   
 <div>
-    <ul id="listOfExpense">
-        
+    <h3>User expenseDetails</h3>
+    <ul id="listOfExpense">  
     </ul>
 </div>
+
+<div id="LeaderBoard">
+    <ul id="expenseboard">  
+    </ul>
+</div>
+
     
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

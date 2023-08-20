@@ -10,6 +10,7 @@ const {Order}=require('./model/orders.js')
 
 const expenseRoutes = require('./router/router.js')
 const purchaseRoute=require('./router/purchase.js')
+const premium=require('./router/premium')
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
@@ -17,6 +18,7 @@ app.use(bodyParser.json({ extended: false }));
 app.use(express.static('./frontEnd/expense'));
 app.use('/', expenseRoutes)
 app.use('/api',purchaseRoute)
+app.use('/api/premium',premium)
 
 
 User.hasMany(Expense)

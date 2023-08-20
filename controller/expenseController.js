@@ -35,7 +35,7 @@ const deleteExpense=async(req,res,next)=>{
       if(response===0){
         res.status(500).json({message:"you are not authorized user"})
       }else{
-        console.log(response)
+        // console.log(response)
         return res.status(201).json({message:"expense deleted successfully  having"})
       }
 

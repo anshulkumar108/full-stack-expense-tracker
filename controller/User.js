@@ -36,8 +36,8 @@ const Usersignup = async (req, res, next) => {
 
 }
 
-function generateAccessToken(id) {
-  return jwt.sign({ userId: id }, 'secret');
+function generateAccessToken(id,name,ispremiumUser) {
+  return jwt.sign({ userId: id,name:name,ispremiumUser }, 'secret');
 }
 
 
@@ -48,6 +48,7 @@ const Usersignin = async (req, res, next) => {
   try {
 
     const existingUser = await User.findOne({ where: { email: Email } });
+    console.log(existingUser)
     if (!existingUser) {
       res.status(404).json({ message: 'Email ID does not exist' })
     }
@@ -58,7 +59,7 @@ const Usersignin = async (req, res, next) => {
       return res.status(402).json({ message: 'Wrong password' });
     }
 
-    const token = generateAccessToken(existingUser.id)
+    const token = generateAccessToken(existingUser.id,existingUser.name,existingUser.isPremimum)
 
     res.status(201).json({ user: existingUser, token: token })
     console.log("you log in successful")

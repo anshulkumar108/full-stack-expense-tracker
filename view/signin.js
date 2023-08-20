@@ -14,14 +14,12 @@ document.getElementById('signinForm').addEventListener('submit', async (e) => {
         };
         clearInput();
         try {
-
             const response = await axios.post('http://localhost:5000/users/signin', SigninDetails);
             const token = response.data.token;
             console.log(token)
             localStorage.setItem('accessToken', token);
             if (response.status == 201) {
                 window.location.href = "./expenditure.html"
-                alert(response.data.message);
             } else if (response.status == 402) {
                 alert('Wrong password')
             } else {
