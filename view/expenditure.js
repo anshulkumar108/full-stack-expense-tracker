@@ -95,6 +95,7 @@ async function deleteExpense(event, ExpenseId) {
                 "Authorization": token
             }
         });
+       
         if (response.status == 201) {
             expenseElement.remove();
         } else {
