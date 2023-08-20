@@ -7,6 +7,7 @@ const {sequelize} = require('./database/squelize');
 const {Expense} = require('./model/expenditure');
 const {User} = require('./model/login');
 const {Order}=require('./model/orders.js')
+const ExpenseTotalSum=require('./model/ExpensetotalSum');
 
 const expenseRoutes = require('./router/router.js')
 const purchaseRoute=require('./router/purchase.js')
@@ -27,6 +28,8 @@ Expense.belongsTo(User)
 User.hasMany(Order)
 Order.belongsTo(User)
 
+User.hasMany(ExpenseTotalSum)
+ExpenseTotalSum.belongsTo(User)
 
 sequelize.sync().then((result) => {
     app.listen(5000);
