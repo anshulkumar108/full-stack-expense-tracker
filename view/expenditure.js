@@ -172,6 +172,7 @@ async function showLeadBoard() {
     leaderBoard.innerText = "Show LeaderBoard";
     document.getElementById('message').appendChild(leaderBoard);
     leaderBoard.addEventListener('click', async (e) => {
+        e.preventDefault();
         const token = localStorage.getItem('accessToken');
         try {
             const h3=document.createElement('h3')
@@ -184,7 +185,7 @@ async function showLeadBoard() {
             { headers: { "Authorization": token } })
             const listOfUsers=response.data;
             listOfUsers.forEach(element => {
-                li.innerHTML+=`<li>Name:${element.name} TOTAL Expenses:${element.total_amount}</li>`
+                li.innerHTML+=`<li>Name:${element.name} TOTAL Expenses:${element.total_Expense}</li>`
             });
             document.getElementById('expenseboard').appendChild(li);
             document.getElementById('LeaderBoard').appendChild( document.getElementById('expenseboard'));

@@ -12,9 +12,10 @@ const addExpense = async (req, res, next) => {
             category: Category,
             userdetailId: req.user.id, authenticate,
         });
-        const totalAmount= Number(req.user.amount) +Number(PostData.amount);
+        // console.log('/////////',req.user,'\\\\\\\\')
+        const totalAmount= Number(req.user.total_Expense) +Number(PostData.amount);
       const update= await User.update({total_Expense:totalAmount},{where:{id:req.user.id}});
-          console.log(">>>>",totalAmount ,">>>>>.")  
+        //   console.log(">>>>",totalAmount ,">>>>>.")  
         res.status(201).json({ PostData })
 
     } catch (error) {
