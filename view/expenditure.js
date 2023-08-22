@@ -6,6 +6,7 @@ const category = document.getElementById('Category');
 
 function parseJwt(token) {
     var base64Url = token.split('.')[1];
+    console.log(base64Url)
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
@@ -110,7 +111,6 @@ async function deleteExpense(event, ExpenseId) {
 
 document.getElementById('Premium').addEventListener('click', async (e) => {
     const token = localStorage.getItem('accessToken');
-
     try {
         const response = await axios.get('http://localhost:5000/api/purchaseMember',
             { headers: { "Authorization": token } });
@@ -127,15 +127,12 @@ document.getElementById('Premium').addEventListener('click', async (e) => {
                     console.log(res);
                     alert('You are a Premium User Now');
                     localStorage.setItem('isPremium', 'true');
-                    document.getElementById('Premium').style.visibility = "hidden";
-                    document.getElementById('message').innerHTML = "You are a premium user";
+                    checkAndDisplayPremiumMessage();
+                    showLeadBoard();
                 } catch (error) {
                     console.log(error);
                 }
-
-
             }
-
         };
         const rzp1 = new Razorpay(options);
         rzp1.open();
@@ -171,8 +168,12 @@ async function showLeadBoard() {
     leaderBoard.id = "board"
     leaderBoard.innerText = "Show LeaderBoard";
     document.getElementById('message').appendChild(leaderBoard);
-    leaderBoard.addEventListener('click', async (e) => {
+
+    let leaderboardShown = false;
+
+    leaderBoard.onclick =async (e) => {
         e.preventDefault();
+        if (!leaderboardShown) { // Check if the leaderboard is not already shown
         const token = localStorage.getItem('accessToken');
         try {
             const h3=document.createElement('h3')
@@ -190,10 +191,13 @@ async function showLeadBoard() {
             document.getElementById('expenseboard').appendChild(li);
             document.getElementById('LeaderBoard').appendChild( document.getElementById('expenseboard'));
 
+            leaderboardShown = true;// Set the flag to true after showing the leaderboard
+
         } catch (error) {
             console.log(error);
         }
-    })
+    }
+}
 
 }
 

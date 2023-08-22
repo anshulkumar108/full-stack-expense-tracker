@@ -48,7 +48,7 @@ const Usersignin = async (req, res, next) => {
   try {
 
     const existingUser = await User.findOne({ where: { email: Email } });
-    console.log(existingUser)
+    // console.log(existingUser)
     if (!existingUser) {
       res.status(404).json({ message: 'Email ID does not exist' })
     }

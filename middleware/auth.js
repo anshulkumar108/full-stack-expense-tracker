@@ -12,7 +12,7 @@ async function userauthenticate(req, res, next) {
     // console.log("userId>>>>>>",user.userId);
     try {
       const responseUser=  await User.findByPk(user.userId)
-      console.log("responseUserId>>>>>>",responseUser.id);
+      console.log("responseUserId>>>>>>",responseUser);
             req.user = responseUser
             next(); // Proceed to the next middleware/route handler
     } catch (error) {
