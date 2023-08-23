@@ -1,8 +1,14 @@
 
 const email = document.getElementById('email');
 const password = document.getElementById('password');
+const loginForm = document.getElementById('signinForm');
+const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+const cancelResetBtn = document.getElementById('cancelResetBtn');
 
-document.getElementById('signinForm').addEventListener('submit', async (e) => {
+forgotPasswordForm.style.display = 'none';
+
+loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     if (email === '' || password === '') {
@@ -36,3 +42,33 @@ function clearInput() {
     document.getElementById('email').value = "";
     document.getElementById('password').value = "";
 }
+
+forgotPasswordBtn.addEventListener('click',ForgetPassword);
+
+function ForgetPassword(){
+    loginForm.style.display='none';
+    forgotPasswordForm.style.display='block';
+}
+
+document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const forgetUserDetails = {
+        Email: document.getElementById('resetEmail').value,
+        ResetPassword: document.getElementById('resetPassword').value,
+    };
+    console.log(forgetUserDetails.Email);
+
+    try {
+        const response = await axios.post('http://localhost:5000/api/password/forgotpassword', forgetUserDetails);
+        console.log(response.data); // Handle the response data as needed
+    } catch (error) {
+        console.error(error);
+    }
+})
+
+function showLoginForm() {
+    forgotPasswordForm.style.display = 'none';
+    loginForm.style.display = 'block';
+}
+
+cancelResetBtn.addEventListener('click', showLoginForm);
