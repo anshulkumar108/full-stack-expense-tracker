@@ -3,10 +3,13 @@ const app = express();
 var cors = require('cors')
 app.use(cors())
 
+require('dotenv').config();
+
 const {sequelize} = require('./database/squelize');
 const {Expense} = require('./model/expenditure');
 const {User} = require('./model/login');
 const {Order}=require('./model/orders.js')
+const ForgetPassword=require('./model/ForgotPasswordRequests.js')
 
 
 const expenseRoutes = require('./router/router.js')
@@ -29,6 +32,8 @@ Expense.belongsTo(User)
 User.hasMany(Order)
 Order.belongsTo(User)
 
+User.hasMany(ForgetPassword)
+ForgetPassword.belongsTo(User);
 
 sequelize.sync().then((result) => {
     app.listen(5000);

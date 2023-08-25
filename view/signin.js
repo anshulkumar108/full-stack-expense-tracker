@@ -48,15 +48,15 @@ forgotPasswordBtn.addEventListener('click',ForgetPassword);
 function ForgetPassword(){
     loginForm.style.display='none';
     forgotPasswordForm.style.display='block';
+    document.getElementById('forgotPasswordBtn').style.display='none';
 }
 
 document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const forgetUserDetails = {
         Email: document.getElementById('resetEmail').value,
-        ResetPassword: document.getElementById('resetPassword').value,
     };
-    console.log(forgetUserDetails.Email);
+    console.log(forgetUserDetails);
 
     try {
         const response = await axios.post('http://localhost:5000/api/password/forgotpassword', forgetUserDetails);
@@ -69,6 +69,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async (e
 function showLoginForm() {
     forgotPasswordForm.style.display = 'none';
     loginForm.style.display = 'block';
+    document.getElementById('forgotPasswordBtn').style.display = 'block';
 }
 
 cancelResetBtn.addEventListener('click', showLoginForm);
