@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>expense tracker</title>
 </head>
+
 <body id="app">
     <div class="expense">
         <form action="" class="expenseDetails">
             <div>
                 <span><ion-icon name="wallet-outline"></ion-icon></span>
                 <label for="amount">Amount</label>
-                <input type="text"  id="Amount" placeholder="Enter spend Amount" required>
+                <input type="text" id="Amount" placeholder="Enter spend Amount" required />
             </div>
-           
+
             <div>
                 <span><ion-icon name="newspaper-outline"></ion-icon></span>
                 <label for="description">Description</label>
-                <input type="text"  id="Description" placeholder="describe details " required>
+                <input type="text" id="Description" placeholder="describe details " required />
             </div>
 
             <div>
@@ -26,7 +28,7 @@
                 <select name="Category" id="Category">
                     <option value="Select"></option>
                     <option value="Rent">RENT</option>
-                    <OPtion value="Transportation">Travel</OPtion>
+                    <option value="Transportation">Travel</option>
                     <option value="Bill">Bill</option>
                     <option value="EMI">EMI</option>
                     <option value="Movie">Movie</option>
@@ -39,21 +41,17 @@
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         </form>
     </div>
-    <div id="message"> </div>
+    <div id="message"></div>
     <!-- <button type="menu" id="board">Show LeaderBoard</button> -->
-   
-<div>
-    <h3>User expenseDetails</h3>
-    <ul id="listOfExpense">  
-    </ul>
-</div>
 
-<div id="LeaderBoard">
-    <ul id="expenseboard">  
-    </ul>
-</div>
+    <div>
+        <h3>User expenseDetails</h3>
+        <ul id="listOfExpense"></ul>
+    </div>
 
-    
+    <div id="LeaderBoard">
+        <ul id="expenseboard"></ul>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="expenditure.js"></script>

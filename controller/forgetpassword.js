@@ -91,13 +91,18 @@ const resetpassword = async (req, res) => {
     const   resetpassword = {
        newPassword: document.getElementById('resetpassword').value,
     };
+
     console.log( resetpassword);
     try {
         const response = await axios.post('http://localhost:5000/api/password/updatepassword/${id}',resetpassword);
         console.log(response.data); // Handle the response data as needed
+        if(res.status==200){
+          window.location.href = './signin.html';
+        }
     } catch (error) {
         console.error(error);
     }
+    document.getElementById('resetpassword').value="";
 })
   </script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
