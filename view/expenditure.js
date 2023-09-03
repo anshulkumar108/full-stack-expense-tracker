@@ -27,15 +27,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     const isPremium = decodedToken.ispremiumUser;
     console.log(isPremium);
     if (isPremium === true) {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.innerHTML=`<button id="downloadexpense" onclick=" expenseTable()">
-        Download File
-        <span><ion-icon name="cloud-download-outline"></ion-icon></span>
-      </button>`
-        document.body.appendChild(buttonContainer);
         checkAndDisplayPremiumMessage();
         showLeadBoard();
-        expenseTable();
     }
     const response = await axios.get(
         "http://localhost:5000/users/fetchExpenseDetails",
@@ -233,14 +226,13 @@ async function showLeadBoard() {
 }
 
 async function expenseTable() {
-    console.log("expenseTable")
     
     const response = await axios.get(
-        "http://localhost:5000/premiumUser/downloadFile/ExpenseDetails",
+        "http://localhost:5000/api/downloadFile/ExpenseDetails",
         { headers: { "Authorization": token } }
     );
+    console.log("expenseTable",response.data.url)
     try {
-      
         //  const blob = new Blob([data], { type: "octet-stream" });
 
     //in order to download file we need to put it inside of a link and so that user click on it to download file.
@@ -255,8 +247,8 @@ async function expenseTable() {
     //     download: "ExpenseList. csv",
     // });
     var a = document.createElement("a");
-    a.href = response.data.fileUrl;
-    a.download = 'myexpense.csv';
+    a.href = response.data.url;
+    a.download = 'EXPENSE.txt';
     a.click();
     } catch (error) {
         console.log(error);
