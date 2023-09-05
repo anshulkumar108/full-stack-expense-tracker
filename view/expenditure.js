@@ -21,23 +21,23 @@ function parseJwt(token) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
+     NoOfExpPerPage();
+
     const token = localStorage.getItem("accessToken");
     const decodedToken = parseJwt(token);
-    console.log(".....", decodedToken);
     const isPremium = decodedToken.ispremiumUser;
-    console.log(isPremium);
     if (isPremium === true) {
         checkAndDisplayPremiumMessage();
         showLeadBoard();
     }
-    const response = await axios.get(
-        "http://localhost:5000/users/fetchExpenseDetails",
-        { headers: { Authorization: token } }
-    );
-    const expensedetails = response.data.Details;
-    expensedetails.forEach((expense) => {
-        fetchExpenseList(expense);
-    });
+    // const response = await axios.get(
+    //     "http://localhost:5000/users/fetchExpenseDetails",
+    //     { headers: { Authorization: token } }
+    // );
+    // const expensedetails = response.data.Details;
+    // expensedetails.forEach((expense) => {
+    //     fetchExpenseList(expense);
+    // });
 });
 
 function cleanInputText() {
@@ -74,9 +74,10 @@ document.getElementById("submit").addEventListener("click", async (e) => {
 
 async function fetchExpenseList(expensedetails) {
     try {
-        console.log(expensedetails);
+        // console.log(expensedetails);
         const ul = document.getElementById("listOfExpense");
         const ExpenseId = expensedetails.id;
+        console.log(ExpenseId);
         ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
               <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>
               </li>`;
@@ -108,15 +109,13 @@ async function deleteExpense(event, ExpenseId) {
             }
         );
 
-        if (response.status === 204) {
+        if (response.status === 201) {
             // Successful deletion, remove the element from the UI
             expenseElement.remove();
-        } else if (response.status === 401) {
+        } 
+         if (response.status === 401) {
             // Unauthorized, handle as needed
             console.error("Unauthorized request");
-        } else {
-            // Handle other status codes or errors
-            console.error("Unexpected response:", response.status, response.data);
         }
     } catch (error) {
         console.error("An error occurred:", error);
@@ -226,7 +225,7 @@ async function showLeadBoard() {
 }
 
 async function expenseTable() {
-    
+
     const response = await axios.get(
         "http://localhost:5000/api/downloadFile/ExpenseDetails",
         { headers: { "Authorization": token } }
@@ -254,4 +253,46 @@ async function expenseTable() {
         console.log(error);
     }
    
+}
+
+
+ function NoOfExpPerPage(){
+    if(!localStorage.getItem("NoOfExpPerPage")){
+        localStorage.setItem("NoOfExpPerPage",2)
+    }
+
+    if(!localStorage.getItem("currPageOnScreen")){
+        getcurrPage(1);
+    }else{
+        getcurrPage(localStorage.getItem("currPageOnScreen"))
+    }
+    document.querySelector('#ExpensePerPage select').value=localStorage.getItem("NoOfExpPerPage")
+}
+
+document.querySelector('#ExpensePerPage button').addEventListener("click",(e)=>{
+    let val=document.querySelector('#ExpensePerPage select').value;
+    localStorage.setItem("NoOfExpPerPage",val)
+    getcurrPage(1);
+});
+
+async function getcurrPage(page){
+    try {
+        let NoOfExpPerPage=localStorage.getItem("NoOfExpPerPage");
+        // const response=await axios.get(`http://localhost:5000/expense/pagination/${page}/${NoOfExpPerPage}`,
+        // { headers: { "Authorization": token } }
+        // )  
+        const response=await axios.get(`http://localhost:5000/expense/pagination?page=${page}&limit=${NoOfExpPerPage}`,
+        { headers: { 'Authorization': token } }
+        )  
+
+        // const expensedetails = response.data.ExpensePerPage
+        const expensedetails = response.data.result
+        expensedetails.forEach((element)=>{
+            fetchExpenseList(element)
+            console.log(element)
+        })
+    
+    } catch (error) {
+        console.log(error);
+    }
 }

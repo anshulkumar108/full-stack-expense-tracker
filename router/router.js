@@ -16,4 +16,6 @@ router.post('/users/addExpense',userauthenticate,expenditureController.addExpens
 router.get('/users/fetchExpenseDetails/',userauthenticate, expenditureController.fetchExpense)
 router.delete('/users/deleteExpense/:id',userauthenticate,expenditureController.deleteExpense)
 
+router.get('/expense/pagination',userauthenticate, expenditureController.getExpenseOnPage)
+
 module.exports = router;
