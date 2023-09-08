@@ -3,17 +3,20 @@ const authenticate = require("../middleware/auth");
 const { sequelize } = require("../database/squelize");
 const { User } = require("../model/login");
 const { Op } = require("sequelize");
-const{fileUrls}=require("../model/fileUrlTable")
-const { S3Client, PutObjectCommand,GetObjectCommand} = require("@aws-sdk/client-s3");
-const{getSignedUrl}=require("@aws-sdk/s3-request-presigner")
-
+const { fileUrls } = require("../model/fileUrlTable");
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const IAM_USER_KEY = process.env.IAM_USER_KEY;
 const IAM_USER_SECRET = process.env.IAM_USER_SECRET;
-const AWS_REGION = "us-east-1"; 
+const AWS_REGION = "us-east-1";
 
-const ITEM_PER_PAGE=2;
+const ITEM_PER_PAGE = 2;
 
 const addExpense = async (req, res, next) => {
   const t = await sequelize.transaction();
@@ -123,12 +126,10 @@ const deleteExpense = async (req, res, next) => {
   }
 };
 
-
 if (!BUCKET_NAME || !IAM_USER_KEY || !IAM_USER_SECRET) {
   console.error("Required environment variables are missing.");
-  process.exit(1); 
+  process.exit(1);
 }
-
 
 const s3 = new S3Client({
   region: AWS_REGION,
@@ -139,11 +140,10 @@ const s3 = new S3Client({
 });
 
 async function getObjectURL(key) {
- 
- let command = new GetObjectCommand({
+  let command = new GetObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
-    Expires:new Date() 
+    Expires: new Date(),
   });
   const url = await getSignedUrl(s3, command);
   return url;
@@ -154,8 +154,8 @@ async function uploadToS3(data, fileName) {
     Bucket: BUCKET_NAME,
     Key: fileName,
     Body: data,
-    ACL: 'public-read',
-    Expires:new Date()
+    ACL: "public-read",
+    Expires: new Date(),
   };
   try {
     const uploadResult = await s3.send(new PutObjectCommand(params));
@@ -180,16 +180,15 @@ const expensedownload = async (req, res) => {
 
       const url = await getObjectURL(fileName);
 
-      let obj={
+      let obj = {
         userdetailId: req.user.id,
-        fileurl:url,
-      }
-   
+        fileurl: url,
+      };
+
       await fileUrls.create(obj);
       // Construct the S3 URL based on your bucket and filename
       const fileUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileName}${new Date().getTime()}`;
-      res.status(200).json({url,success: true });
-
+      res.status(200).json({ url, success: true });
     } catch (error) {
       console.error("Error in downloadExpense:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -200,66 +199,66 @@ const expensedownload = async (req, res) => {
   }
 };
 
-const allfileUrl=async (req,res,next)=>{
-try {
-  let listOfUrl=await fileUrls.find({ where: { userdetailId: req.user.id },})
-  res.json(listOfUrl)
-} catch (error) {
-  console.log(error);
-}
-}
-const getExpenseOnPage= async (req,res,next)=>{
+const allfileUrl = async (req, res, next) => {
   try {
-    const page= parseInt(req.query.page);
-    const limit=parseInt(req.query.limit);
-
-    const totalExpenses=await Expense.count({
+    let listOfUrl = await fileUrls.find({
       where: { userdetailId: req.user.id },
     });
-console.log(totalExpenses);
-
-    if (!Number.isInteger(page) || page < 1) {
-      return res.status(400).json({ error: 'Invalid page parameter' });
-    }
-
-    const offset = (page - 1) *parseInt(limit);
-
-    const ExpensePerPage=await Expense.findAll({
-        where: { userdetailId: req.user.id },
-        offset: offset, // Offset based on page number
-        limit: Number(limit), // Limit based on items per page
-      })
-
-    const start=offset ;
-    const end=page*limit
-    const result=ExpensePerPage.slice(start,end);
-
-    const next={}
-    if(end<totalExpenses){
-      next.page=page+1,
-      next.limit=limit
-    }
-
-    const previous={}
-   if(start>0){
-    previous.page=page-1,
-    previous.limit=limit
-   }
-     res.status(200).json({ result,next,previous });
-
+    res.json(listOfUrl);
   } catch (error) {
     console.log(error);
   }
+};
 
-}
+const getExpenseOnPage = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page);
+    const limit = parseInt(req.query.limit);
+
+    const totalExpenses = await Expense.count({
+      where: { userdetailId: req.user.id },
+    });
+    console.log(totalExpenses);
+
+    if (!Number.isInteger(page) || page < 1) {
+      return res.status(400).json({ error: "Invalid page parameter" });
+    }
+    const offset = (page - 1) * parseInt(limit);
+    const start = offset; // Calculate start here
+    const end = page * limit; // Calculate end here
+    const result = {};
+
+    if (end < totalExpenses) {
+        result.next = {
+            page: page + 1,
+            limit: limit,
+        };
+    }
+
+    if (start > 0) {
+        result.previous = {
+            page: page - 1,
+            limit: limit,
+        };
+    }
+
+    result.results = await Expense.findAll({
+        where: { userdetailId: req.user.id },
+        offset: offset, 
+        limit: Number(limit), 
+    });
+    res.status(200).json({  result,totalExpenses,previous: result.previous });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   addExpense,
   fetchExpense,
   deleteExpense,
   expensedownload,
-  getExpenseOnPage
+  getExpenseOnPage,
 };
-
 
 // In Sequelize, the offset and limit methods are usually used for pagination directly on the query,
 //  not on the result of findAll.
