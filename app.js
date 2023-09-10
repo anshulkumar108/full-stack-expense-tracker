@@ -1,10 +1,11 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
 var cors = require('cors')
-app.use(cors())
+const https=require('https');
 const fs=require('fs')
-require('dotenv').config();
 const path=require('path')
+
 const {sequelize} = require('./database/squelize');
 const {Expense} = require('./model/expenditure');
 const {User} = require('./model/login');
@@ -20,15 +21,18 @@ const helmet=require('helmet')
 const compression=require('compression');
 const morgan=require('morgan')
 
+
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
 
-const accesslog_stream=fs.createWriteStream(path.join(__dirname,'access.log'),
-{flag:'a'}
-);
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+
+app.use(cors())
+
 app.use(helmet())
 app.use(compression())
-app.use(morgan('combined',{stream:accesslog_stream}))
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use(express.static('./frontEnd/expense'));
 app.use('/', expenseRoutes)
@@ -45,8 +49,14 @@ Order.belongsTo(User)
 User.hasMany(ForgetPassword)
 ForgetPassword.belongsTo(User);
 
+const sslServer=https.createServer({
+    key:fs.readFileSync(path.join(__dirname,'mykey.pem')),
+    cert:fs.readFileSync(path.join(__dirname,'mycert.pem'))
+},
+app)
+
 sequelize.sync().then((result) => {
-    app.listen(5000);
+    sslServer.listen(5000);
 }).catch((err) => {
     console.log(err)
 })

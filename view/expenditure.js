@@ -52,7 +52,7 @@ document.getElementById("submit").addEventListener("click", async (e) => {
   try {
     const token = localStorage.getItem("accessToken");
     const response = await axios.post(
-      "http://localhost:5000/users/addExpense",
+      "https://localhost:5000/users/addExpense",
       ExpenseDetails,
       {
         headers: {
@@ -97,7 +97,7 @@ async function deleteExpense(event, ExpenseId) {
     }
 
     const response = await axios.delete(
-      `http://localhost:5000/users/deleteExpense/${ExpenseId}`,
+      `https://localhost:5000/users/deleteExpense/${ExpenseId}`,
       {
         headers: {
           Authorization: token,
@@ -121,7 +121,7 @@ async function deleteExpense(event, ExpenseId) {
 document.getElementById("Premium").addEventListener("click", async (e) => {
   try {
     const response = await axios.get(
-      "http://localhost:5000/api/purchaseMember",
+      "https://localhost:5000/api/purchaseMember",
       { headers: { Authorization: token } }
     );
     console.log(response);
@@ -131,7 +131,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
       handler: async function (response) {
         try {
           const res = await axios.post(
-            "http://localhost:5000/api/updatetransactionstatus",
+            "https://localhost:5000/api/updatetransactionstatus",
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
@@ -155,7 +155,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const res = await axios.post(
-          "http://localhost:5000/api/updatetransactionstatus",
+          "https://localhost:5000/api/updatetransactionstatus",
           {
             order_id: options.order_id,
             payment_failed: true,
@@ -200,7 +200,7 @@ async function showLeadBoard() {
         const li = document.createElement("li");
 
         const response = await axios.get(
-          "http://localhost:5000/api/premium/usersLeaderBoard",
+          "https://localhost:5000/api/premium/usersLeaderBoard",
           { headers: { Authorization: token } }
         );
         const listOfUsers = response.data;
@@ -222,7 +222,7 @@ async function showLeadBoard() {
 
 async function expenseTable() {
   const response = await axios.get(
-    "http://localhost:5000/api/downloadFile/ExpenseDetails",
+    "https://localhost:5000/api/downloadFile/ExpenseDetails",
     { headers: { Authorization: token } }
   );
   console.log("expenseTable", response.data.url);
@@ -257,11 +257,12 @@ async function getcurrPage() {
   let NoOfExpPerPage = localStorage.getItem("NoOfExpPerPage");
   try {
     const response = await axios.get(
-      `http://localhost:5000/expense/pagination?page=${currentPage}&limit=${NoOfExpPerPage}`,
+      `https://localhost:5000/expense/pagination?page=${currentPage}&limit=${NoOfExpPerPage}`,
       { headers: { Authorization: token } }
     );
+    console.log( response.data.result.rows)
     document.getElementById("listOfExpense").innerText = "";
-    response.data.result.results.forEach((element) => {
+    response.data.result.rows.forEach((element) => {
       fetchExpenseList(element);
     });
 

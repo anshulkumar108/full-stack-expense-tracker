@@ -212,42 +212,27 @@ const allfileUrl = async (req, res, next) => {
 
 const getExpenseOnPage = async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page);
-    const limit = parseInt(req.query.limit);
 
-    const totalExpenses = await Expense.count({
-      where: { userdetailId: req.user.id },
-    });
-    console.log(totalExpenses);
-
-    if (!Number.isInteger(page) || page < 1) {
+    const {page,limit}=req.query
+   
+    if (!page || !Number.isInteger(parseInt(page)) || parseInt(page) < 1) {
       return res.status(400).json({ error: "Invalid page parameter" });
     }
-    const offset = (page - 1) * parseInt(limit);
-    const start = offset; // Calculate start here
-    const end = page * limit; // Calculate end here
-    const result = {};
 
-    if (end < totalExpenses) {
-        result.next = {
-            page: page + 1,
-            limit: limit,
-        };
+    const queries={
+      offset: (parseInt(page) - 1) * parseInt(limit),
+      limit: parseInt(limit),
     }
-
-    if (start > 0) {
-        result.previous = {
-            page: page - 1,
-            limit: limit,
-        };
-    }
-
-    result.results = await Expense.findAll({
-        where: { userdetailId: req.user.id },
-        offset: offset, 
-        limit: Number(limit), 
+  
+    result = await Expense.findAndCountAll({
+      where: {
+        userdetailId: req.user.id
+      },
+      ...queries
     });
-    res.status(200).json({  result,totalExpenses,previous: result.previous });
+
+  
+    res.status(200).json({  result,totalPages:Math.ceil(result.count/limit) });
   } catch (error) {
     console.log(error);
   }
