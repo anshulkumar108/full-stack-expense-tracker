@@ -2,10 +2,11 @@ const amount = document.getElementById("Amount");
 const description = document.getElementById("Description");
 const category = document.getElementById("Category");
 const token = localStorage.getItem("accessToken");
-const nextbtn = document.getElementById("next");
-const previousbtn = document.getElementById("previous");
-const currentPage=localStorage.setItem('currentPage',1)
+const prevButton = document.getElementById("prev-btn");
+const nextButton = document.getElementById("next-btn");
+const itemsPerPageSelect = document.getElementById("items-per-page");
 
+let currentPage = 1;
 
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
@@ -25,7 +26,7 @@ function parseJwt(token) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
- NoOfExpPerPage();
+  getcurrPage(currentPage)
   const token = localStorage.getItem("accessToken");
   const decodedToken = parseJwt(token);
   const isPremium = decodedToken.ispremiumUser;
@@ -71,7 +72,7 @@ async function fetchExpenseList(expensedetails) {
   try {
     // console.log(expensedetails);
     const ul = document.getElementById("listOfExpense");
-    
+
     const ExpenseId = expensedetails.id;
     console.log(ExpenseId);
     ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
@@ -236,63 +237,24 @@ async function expenseTable() {
   }
 }
 
- function NoOfExpPerPage() {
-  if (!localStorage.getItem("NoOfExpPerPage")) {
-    localStorage.setItem("NoOfExpPerPage", 2);
-  } 
-    getcurrPage();
-  document.querySelector("#ExpensePerPage select").value =
-    localStorage.getItem("NoOfExpPerPage");
-}
 
-document.querySelector("#ExpensePerPage button").addEventListener("click", (e) => {
-    let val = document.querySelector("#ExpensePerPage select").value;
-    localStorage.setItem("NoOfExpPerPage", val);
-    getcurrPage();
-  });
 
-async function getcurrPage() {
-  let currentPage=localStorage.getItem('currentPage')
-  document.getElementById("page").textContent = currentPage;
-  let NoOfExpPerPage = localStorage.getItem("NoOfExpPerPage");
+async function getcurrPage(currentPage) {
+  const NoOfExpPerPage=itemsPerPageSelect.value
+  console.log(NoOfExpPerPage);
+
   try {
     const response = await axios.get(
       `https://localhost:5000/expense/pagination?page=${currentPage}&limit=${NoOfExpPerPage}`,
       { headers: { Authorization: token } }
     );
-    console.log( response.data.result.rows)
+    console.log(response );
+    const pageData=response.data.result.rows
     document.getElementById("listOfExpense").innerText = "";
-    response.data.result.rows.forEach((element) => {
+    pageData.forEach((element) => {
       fetchExpenseList(element);
     });
-
-    if (response.data.result.next) {
-        nextbtn.style.visibility = "visible";
-      } else {
-        nextbtn.style.visibility = "hidden";
-      }
-
-    if (response.data.result.previous) {
-        previousbtn.style.visibility = "visible";
-      } else {
-        previousbtn.style.visibility = "hidden";
-      }
-
-      nextbtn.addEventListener("click", () => {
-        localStorage.setItem("currentPage", response.data.result.next.page);
-        getcurrPage();
-    });
-  
   } catch (error) {
     console.log(error);
   }
 }
-
-
-
-previousbtn.addEventListener("click", () => {
-    const currentPage=parseInt(localStorage.getItem('currentPage'))
-    console.log(currentPage);
-    localStorage.setItem("currentPage", currentPage -1);
-    getcurrPage();
-});

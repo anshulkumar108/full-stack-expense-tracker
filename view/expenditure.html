@@ -54,22 +54,21 @@
     </div>
 
     <div id="listingTable"></div>
-    <button type="button" id="previous">Prev</button>
-page: <span id="page"></span>
-<button type="button" id="next">Next</button>
-
+    <div id="pagination-controls">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
+      </div>
     </div>
     <label id="expPerPage">Select Expense per Page</label>
-    <div id="ExpensePerPage">
-        <select >
-            <option value="2">2</option>
-            <option value="4">4</option>
-            <option value="6">6</option>
-            <option value="8">8</option>
-            <option value="10">10</option>
+    <div id="pagination-options">
+        <label for="items-per-page">Items per Page:</label>
+        <select id="items-per-page">
+          <option value="2">2</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
         </select>
-<button>submit</button>
-    </div>
+      </div>
     <div id="LeaderBoard">
         <ul id="expenseboard"></ul>
     </div>
