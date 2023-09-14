@@ -214,13 +214,17 @@ const getExpenseOnPage = async (req, res, next) => {
   try {
 
     const {page,limit}=req.query
-   
+  //  let startIndex=(parseInt(page) - 1) * parseInt(limit)
+  //  let lastIndex=parseInt(page)* parseInt(limit)
+
     if (!page || !Number.isInteger(parseInt(page)) || parseInt(page) < 1) {
       return res.status(400).json({ error: "Invalid page parameter" });
     }
 
+    let Response={};
+
     const queries={
-      offset: (parseInt(page) - 1) * parseInt(limit),
+      offset: (page - 1) * parseInt(limit),
       limit: parseInt(limit),
     }
   
@@ -231,8 +235,17 @@ const getExpenseOnPage = async (req, res, next) => {
       ...queries
     });
 
+    let totalPages=Math.ceil(result.count/limit);
+
+    if(parseInt(page)<Math.ceil(result.count/limit)){
+      Response.next=parseInt(page)+1;
+    }
+
+    if(queries.offset>0){
+      Response.previous=parseInt(page)-1;
+    }
   
-    res.status(200).json({  result,totalPages:Math.ceil(result.count/limit) });
+    res.status(200).json({  result,totalPages:totalPages ,next:Response.next,previous:Response.previous});
   } catch (error) {
     console.log(error);
   }

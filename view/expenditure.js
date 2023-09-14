@@ -240,20 +240,41 @@ async function expenseTable() {
 
 
 async function getcurrPage(currentPage) {
-  const NoOfExpPerPage=itemsPerPageSelect.value
-  console.log(NoOfExpPerPage);
-
+  let limit=document.getElementById("items-per-page").value
   try {
     const response = await axios.get(
-      `https://localhost:5000/expense/pagination?page=${currentPage}&limit=${NoOfExpPerPage}`,
+      `https://localhost:5000/expense/pagination?page=${currentPage}&limit=${limit}`,
       { headers: { Authorization: token } }
     );
-    console.log(response );
+    console.log(response);
     const pageData=response.data.result.rows
+
     document.getElementById("listOfExpense").innerText = "";
+   
+    if(currentPage=response.data.totalPages){
+      nextButton.style.visibility = "hidden"
+    }
+
+    console.log(currentPage);
+    if(currentPage<=1){
+      prevButton.style.visibility = "hidden"
+    }else{
+      prevButton.style.visibility = "block"
+    }
+
     pageData.forEach((element) => {
       fetchExpenseList(element);
     });
+
+    nextButton.addEventListener('click',()=>{
+      currentPage=response.data.next
+      getcurrPage(currentPage);
+    })
+
+    prevButton.addEventListener('click',()=>{
+      currentPage--;
+      getcurrPage(currentPage);
+    })
   } catch (error) {
     console.log(error);
   }
