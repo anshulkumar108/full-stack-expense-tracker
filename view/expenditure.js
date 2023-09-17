@@ -2,11 +2,16 @@ const amount = document.getElementById("Amount");
 const description = document.getElementById("Description");
 const category = document.getElementById("Category");
 const token = localStorage.getItem("accessToken");
-const prevButton = document.getElementById("prev-btn");
-const nextButton = document.getElementById("next-btn");
-const itemsPerPageSelect = document.getElementById("items-per-page");
+const ul = document.querySelector('ul');
 
 let currentPage = 1;
+let limit=document.getElementById("pages").value
+console.log(limit)
+
+document.getElementById("pages").addEventListener('change',()=>{
+  const newLimit = document.getElementById("pages").value;
+  getcurrPage(currentPage,newLimit);
+})
 
 function parseJwt(token) {
   var base64Url = token.split(".")[1];
@@ -26,7 +31,7 @@ function parseJwt(token) {
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
-  getcurrPage(currentPage)
+  getcurrPage(currentPage,limit)
   const token = localStorage.getItem("accessToken");
   const decodedToken = parseJwt(token);
   const isPremium = decodedToken.ispremiumUser;
@@ -70,7 +75,7 @@ document.getElementById("submit").addEventListener("click", async (e) => {
 
 async function fetchExpenseList(expensedetails) {
   try {
-    // console.log(expensedetails);
+   
     const ul = document.getElementById("listOfExpense");
 
     const ExpenseId = expensedetails.id;
@@ -78,6 +83,7 @@ async function fetchExpenseList(expensedetails) {
     ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
               <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>
               </li>`;
+              console.log(ul.innerHTML);
   } catch (error) {
     console.log(error);
   }
@@ -239,43 +245,70 @@ async function expenseTable() {
 
 
 
-async function getcurrPage(currentPage) {
-  let limit=document.getElementById("items-per-page").value
+async function getcurrPage(currentPage,limit) {
+  
   try {
     const response = await axios.get(
       `https://localhost:5000/expense/pagination?page=${currentPage}&limit=${limit}`,
       { headers: { Authorization: token } }
     );
-    console.log(response);
-    const pageData=response.data.result.rows
+    const ul = document.getElementById("listOfExpense");
+    ul.innerText = "";
 
-    document.getElementById("listOfExpense").innerText = "";
-   
-    if(currentPage=response.data.totalPages){
-      nextButton.style.visibility = "hidden"
-    }
-
-    console.log(currentPage);
-    if(currentPage<=1){
-      prevButton.style.visibility = "hidden"
-    }else{
-      prevButton.style.visibility = "block"
-    }
-
-    pageData.forEach((element) => {
-      fetchExpenseList(element);
+   response.data.result.rows.forEach((expensedetails) => {
+    const ExpenseId = expensedetails.id;
+    const li = document.createElement("li");
+    li.id = ExpenseId;
+    li.innerHTML = `${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
+      <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>`;
+    ul.appendChild(li);
     });
 
-    nextButton.addEventListener('click',()=>{
-      currentPage=response.data.next
-      getcurrPage(currentPage);
-    })
+    console.log("total pages are"+response.data.totalPages )
+  
+    elem(response.data.totalPages, response.data.page)
 
-    prevButton.addEventListener('click',()=>{
-      currentPage--;
-      getcurrPage(currentPage);
-    })
   } catch (error) {
     console.log(error);
   }
+}
+
+ function elem(allPages, page) {
+  console.log(allPages+ "is all apge")
+  let li = '';
+  let beforePages = parseInt(page)- 1;
+
+  let afterPages = parseInt(page) + 1;
+ 
+  let liActive;
+
+  if (parseInt(page)> 1) {
+    // li += `<button class="btn" onclick="getcurrPage(${page - 1}, ${limit})"><i class="fas fa-angle-left"></i></button>`;
+    li += `<button class="btn" onclick="getcurrPage(${parseInt(page) - 1}, ${limit})">PREVIOUS</button>`;
+  }
+
+  for (let pageLength = beforePages; pageLength <= afterPages; pageLength++) {
+    if (pageLength > parseInt(allPages)) {
+      continue;
+    }
+    if (pageLength == 0) {
+      pageLength = pageLength + 1;
+    }
+
+    if (parseInt(page) == pageLength) {
+      liActive = 'active';
+    } else {
+      liActive = '';
+    }
+
+    li += `<button class="numb ${liActive}" onclick="getcurrPage(${pageLength}, ${limit})"><span>${pageLength}</span></button>`;
+  }
+
+  if (parseInt(page) < parseInt(allPages)) {
+    // li += `<button class="btn" onclick="getcurrPage(${page + 1}, ${limit})"><i class="fas fa-angle-right"></i></button>`;
+    li += `<button class="btn" onclick="getcurrPage(${parseInt(page)+1}, ${limit})">NEXT</button>`
+  }
+
+
+  document.getElementById("pagebtn").innerHTML = li;
 }

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>expense tracker</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <body id="app">
@@ -43,6 +44,8 @@
                 <span><ion-icon name="cloud-download-outline"></ion-icon></span>
             </button>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <script src="https://kit.fontawesome.com/2745e261bc.js"></script>
+           
         </form>
     </div>
     <div id="message"></div>
@@ -54,27 +57,36 @@
     </div>
 
     <div id="listingTable"></div>
-    <div id="pagination-controls">
-        <button id="prev-btn">Previous</button>
-        <button id="next-btn">Next</button>
-      </div>
+
+    <div class="wrapper">
+        <ul id='pagebtn'>
+            <!-- <li class="btn"><i class="fas fa-angle-left"></i></li>
+            <li class="numb active"><span>1</span></li>
+            <li class="numb "><span>2</span></li>
+            <li class="numb"><span>3</span></li>
+            <li class="numb"><span>4</span></li>
+            <li class="numb"><span>5</span></li>
+            <li class="btn"><i class="fas fa-angle-right"></i></li> -->
+        </ul>
     </div>
-    <label id="expPerPage">Select Expense per Page</label>
-    <div id="pagination-options">
-        <label for="items-per-page">Items per Page:</label>
-        <select id="items-per-page">
-          <option value="2">2</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-      </div>
+
+<div id="totalpages">
+    <select name="pages" id="pages">
+        <option value="2" >2</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+    </select>
+</div>
+
     <div id="LeaderBoard">
         <ul id="expenseboard"></ul>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="expenditure.js"></script>
+
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
