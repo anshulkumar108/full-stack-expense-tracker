@@ -21,7 +21,7 @@ const helmet=require('helmet')
 const compression=require('compression');
 const morgan=require('morgan')
 
-
+const Port=process.env.Port || 5000;
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
@@ -49,14 +49,14 @@ Order.belongsTo(User)
 User.hasMany(ForgetPassword)
 ForgetPassword.belongsTo(User);
 
-const sslServer=https.createServer({
-    key:fs.readFileSync(path.join(__dirname,'mykey.pem')),
-    cert:fs.readFileSync(path.join(__dirname,'mycert.pem'))
-},
-app)
+// const sslServer=https.createServer({
+//     key:fs.readFileSync(path.join(__dirname,'mykey.pem')),
+//     cert:fs.readFileSync(path.join(__dirname,'mycert.pem'))
+// },
+// app)
 
 sequelize.sync().then((result) => {
-    sslServer.listen(5000);
+    app.listen(Port);
 }).catch((err) => {
     console.log(err)
 })
