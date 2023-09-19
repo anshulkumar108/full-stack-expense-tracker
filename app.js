@@ -21,7 +21,7 @@ const helmet=require('helmet')
 const compression=require('compression');
 const morgan=require('morgan')
 
-const Port=process.env.Port || 5000;
+const Port=process.env.PORT|| 5000;
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
