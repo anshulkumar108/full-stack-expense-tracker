@@ -4,35 +4,36 @@ const jwt = require('jsonwebtoken');
 
 
 const Usersignup = async (req, res, next) => {
-  try {
-    //Existing user check
-    const { Name, Email, Password } = req.body;
-    const existingUser = await User.findOne({ where: { email: Email } });
-    if (existingUser) {
-      return res.status(404).json({ message: "user already exists" });
-    } else {
-      //hased password
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(Password, saltRounds);
+  const { Name, Email, Password } = req.body;
 
-      //user creation
-      if (Name === null || Email === null || Password === null) {
-        return res.status(500).json({ message: "check all input details are filled? " });
-      } else {
-        const userdetails = await User.create({
-          name: Name,
-          email: Email,
-          password: hashedPassword
-        });
-        // console.log(userdetails)
-        res.status(201).json({ user: userdetails })
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'something went wrong' })
+  //  Check if the required fields are provided
+   if (!Name || !Email || !Password) {
+    return res.status(400).json({ message: "Please provide all required details" });
   }
 
+  try {
+    // Existing user check
+    const existingUser = await User.findOne({ where: { email: Email } });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    // Hashed password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(Password, saltRounds);
+
+    // User creation
+    const userdetails = await User.create({
+      name: Name,
+      email: Email,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ user: userdetails });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
 }
  
 

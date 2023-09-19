@@ -7,7 +7,7 @@ const sequelize=new Sequelize(process.env.DB_NAME,process.env.DB_USER,process.en
   { dialect:'mysql',
     host:process.env.DB_HOST
   });
- console.log(process.env.DB_HOST);
+
 const checkConnection=async ()=>{
     try{
       await sequelize.authentication();

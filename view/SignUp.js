@@ -2,6 +2,7 @@ const name = document.getElementById('name');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 
+
 document.getElementById('signUpForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
