@@ -34,20 +34,18 @@ app.use(cors())
 app.use(compression())// it is use to decrease the file size we sending to the client
 // app.use(morgan('combined', { stream: accessLogStream }));
 
-app.use(express.static('./view/expense'));
 app.use('/', expenseRoutes)
 app.use('/api',purchaseRoute)
 app.use('/api/premium',premium)
 app.use('/api',forgotpassword)
 
-app.use(express.static(path.join(__dirname, 'view')));
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'view', 'signup.html'));
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../' ,'view/${req.url}'));
 });
 
-app.get('/signin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'view', 'signin.html'));
-});
+app.get('/',(req,res)=>{
+    res.send({successful:true})
+})
 
 //Association
 User.hasMany(Expense)
@@ -58,12 +56,6 @@ Order.belongsTo(User)
 
 User.hasMany(ForgetPassword)
 ForgetPassword.belongsTo(User);
-
-// const sslServer=https.createServer({
-//     key:fs.readFileSync(path.join(__dirname,'mykey.pem')),
-//     cert:fs.readFileSync(path.join(__dirname,'mycert.pem'))
-// },
-// app)
 
 sequelize.sync().then((result) => {
     app.listen(Port);
