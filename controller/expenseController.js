@@ -67,7 +67,7 @@ const deleteExpense = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
     const userId = req.params.id;
-    console.log(userId);
+    // console.log(userId);
 
     if (userId === undefined || userId.length === 0) {
       return res
@@ -88,7 +88,7 @@ const deleteExpense = async (req, res, next) => {
       },
     });
 
-    console.log("responseses>>>>>", responseses, "<<<<<<<<<responseses");
+    // console.log("responseses>>>>>", responseses, "<<<<<<<<<responseses");
     const totalAmount =
       req.user.total_Expense - responseses[0].dataValues.amount;
     // console.log("req.user.total_Expense",req.user.total_Expense);//total expense amount
@@ -104,7 +104,7 @@ const deleteExpense = async (req, res, next) => {
           transaction: t,
         }
       );
-      console.log(" update>>>>>", update);
+      // console.log(" update>>>>>", update);
       if (response === 0) {
         await t.rollback();
         res.status(500).json({ message: "you are not authorized user" });
@@ -127,7 +127,7 @@ const deleteExpense = async (req, res, next) => {
 };
 
 if (!BUCKET_NAME || !IAM_USER_KEY || !IAM_USER_SECRET) {
-  console.error("Required environment variables are missing.");
+  // console.error("Required environment variables are missing.");
   process.exit(1);
 }
 
@@ -162,7 +162,7 @@ async function uploadToS3(data, fileName) {
     console.log("File uploaded successfully:", uploadResult);
     return uploadResult;
   } catch (error) {
-    console.error("Error uploading to S3:", error);
+    // console.error("Error uploading to S3:", error);
     throw error;
   }
 }
@@ -188,13 +188,14 @@ const expensedownload = async (req, res) => {
       await fileUrls.create(obj);
       // Construct the S3 URL based on your bucket and filename
       const fileUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileName}${new Date().getTime()}`;
+      console.log(fileUrl);
       res.status(200).json({ url, success: true });
     } catch (error) {
       console.error("Error in downloadExpense:", error);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({ error: " server error" });
     }
   } catch (error) {
-    console.error("Error in downloadExpense:", error);
+    // console.error("Error in downloadExpense:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

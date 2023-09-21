@@ -8,9 +8,9 @@ const {userauthenticate} = require('../middleware/auth.js');
 
 
 //user  signin and singup routes
-router.post('/users/signup',userController.Usersignup);
-router.get('/users/signup',userController.Usersignup);
-router.post('/users/signin',userController.Usersignin)
+router.post('/signup',userController.Usersignup);
+router.get('/signup',userController.Usersignup);
+router.post('/signin',userController.Usersignin)
 
 //expense controller routes
 router.post('/users/addExpense',userauthenticate,expenditureController.addExpense)

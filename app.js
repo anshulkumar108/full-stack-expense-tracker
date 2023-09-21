@@ -26,7 +26,10 @@ const Port=process.env.PORT|| 5000;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
 
-// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+
+
+app.use(express.static(__dirname + '/view', { index: 'Signin.html'})
+);
 
 app.use(cors())
 
@@ -39,13 +42,10 @@ app.use('/api',purchaseRoute)
 app.use('/api/premium',premium)
 app.use('/api',forgotpassword)
 
-app.use((req, res) => {
-    res.sendFile(path.join(__dirname, '../' ,'view/${req.url}'));
-});
+// app.get('/signin', (req, res) => {
+//     res.sendFile(__dirname + '/view/signin.html');
+//   });
 
-app.get('/',(req,res)=>{
-    res.send({successful:true})
-})
 
 //Association
 User.hasMany(Expense)

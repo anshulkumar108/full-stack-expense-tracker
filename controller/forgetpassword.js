@@ -7,7 +7,7 @@ const ForgotpasswordRequest = require("../model/ForgotPasswordRequests");
 const forgotpassword = async (req, res) => {
   try {
     const {Email} = req.body;
-    console.log("email",Email)
+    // console.log("email",Email)
     const user = await User.findOne({ where: { email: Email} });
     const newid = uuid.v4();
     if (user) {
@@ -17,7 +17,7 @@ const forgotpassword = async (req, res) => {
         userdetailId: user.id,
       };
       let newobj = await ForgotpasswordRequest.create(obj);
-      console.log(newobj);
+      // console.log(newobj);
     } else {
       return res.status(500).json({
         message: "No account registered with this mail id",
@@ -33,7 +33,7 @@ const forgotpassword = async (req, res) => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-    console.log(process.env.EMAIL, process.env.EMAIL_PASSWORD);
+    // console.log(process.env.EMAIL, process.env.EMAIL_PASSWORD);
 
     const mailoptions = {
       from: process.env.EMAIL,
@@ -46,7 +46,7 @@ const forgotpassword = async (req, res) => {
        http://localhost:5000/api/password/resetpassword/${newid}
        </a>`,
     };
-    console.log(mailoptions);
+    // console.log(mailoptions);
     transporter.sendMail(mailoptions, function (error, info) {
       if (error) {
         console.log(error);
@@ -64,7 +64,7 @@ const forgotpassword = async (req, res) => {
 
 const resetpassword = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   try {
     const uuid = await ForgotpasswordRequest.findOne({ where: { id: id } });
     if (uuid.id === id) {
@@ -115,7 +115,7 @@ const resetpassword = async (req, res) => {
 };
 
 const updatepassword = async(req, res) => {
-  console.log("resetpassword");
+  // console.log("resetpassword");
   try {
     const { newPassword } = req.body;
     const { resetpasswordid } = req.params;
@@ -124,15 +124,15 @@ const updatepassword = async(req, res) => {
 
     try {
       const user=await ForgotpasswordRequest.findOne({ where : { id: resetpasswordid }})
-      console.log("<<<<<<<<<<<<<<<<<<<<",user);
+      // console.log("<<<<<<<<<<<<<<<<<<<<",user);
       const newUserPaword=await User.findOne({where:{id:user.userdetailId}})
-      console.log("/////////////",newUserPaword);
+      // console.log("/////////////",newUserPaword);
        if(newUserPaword){
         if(user) {
           //encrypt the password
           let saltRounds=10;
           const newHashedPassword=await bcrypt.hash(newPassword,saltRounds);
-          console.log(newHashedPassword);
+          // console.log(newHashedPassword);
           User.update({password:newHashedPassword},{where:{id:newUserPaword.id}});
           res.status(200).json({ newHashedPassword,message:"password changed successfully" });
         }else{

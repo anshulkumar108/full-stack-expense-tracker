@@ -41,11 +41,11 @@ const updatetransactionstatus = async (req, res) => {
                 { paymentId: payment_id, orderId: order_id, status: "successful" },
                 { where: { userdetailId: req.user.id } }
             );
-            await User.update(
+          const user=  await User.update(
                 { isPremimum: true },
                 { where: { id: req.user.id } }
             );
-            console.log("Transaction and user details updated successfully");
+            console.log("Transaction and user details updated successfully",user);
         }
 
         res.status(202).json({ success: true, message: "Transaction status updated" });
@@ -54,6 +54,7 @@ const updatetransactionstatus = async (req, res) => {
         res.status(500).json({ success: false, message: "Error updating transaction status" });
     }
 }
+
 
 module.exports = {
     purchaseMemberShip,

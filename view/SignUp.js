@@ -14,13 +14,13 @@ document.getElementById('signUpForm').addEventListener('submit', async (e) => {
             Email: e.target.email.value.trim(),
             Password: e.target.password.value,
         };
-        
+        console.log(SignupDetails);
         clearInput();
         try {
-            const response = await axios.post('http://localhost:5000/users/signup', SignupDetails)
-            
+            const response = await axios.post('http://localhost:5000/signup', SignupDetails)
+            console.log(response);
             if (response.status === 201) {
-                window.location.href = './signin.html';
+                window.location.href = './Signin.html';
             } else {
                 alert('Email is already registered.');
                 console.log(error);

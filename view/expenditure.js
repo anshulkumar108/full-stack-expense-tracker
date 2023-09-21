@@ -226,6 +226,8 @@ async function showLeadBoard() {
     }
   };
 }
+document.getElementById("downloadexpense").addEventListener('click',expenseTable)
+
 
 async function expenseTable() {
   const response = await axios.get(
@@ -246,7 +248,6 @@ async function expenseTable() {
 
 
 async function getcurrPage(currentPage,limit) {
-  
   try {
     const response = await axios.get(
       `http://localhost:5000/expense/pagination?page=${currentPage}&limit=${limit}`,

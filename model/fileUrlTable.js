@@ -4,7 +4,7 @@ const {sequelize}=require('../database/squelize');
 const fileUrls=sequelize.define('fileurl',{
 
     fileurl:{
-        type: DataTypes.STRING,
+        type:DataTypes.STRING(1000),
         allownull:false,
     },
     userdetailId:{

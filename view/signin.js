@@ -19,7 +19,7 @@ loginForm.addEventListener('submit', async (e) => {
         };
         clearInput();
         try {
-            const response = await axios.post('http://localhost:5000/users/signin', SigninDetails);
+            const response = await axios.post('http://localhost:5000/signin', SigninDetails);
             const token = response.data.token;
             console.log(token)
             localStorage.setItem('accessToken', token);
