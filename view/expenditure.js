@@ -58,7 +58,7 @@ document.getElementById("submit").addEventListener("click", async (e) => {
   try {
     const token = localStorage.getItem("accessToken");
     const response = await axios.post(
-      "http://44.209.180.175/users/addExpense",
+      "http://44.209.180.175:5001/users/addExpense",
       ExpenseDetails,
       {
         headers: {
@@ -104,7 +104,7 @@ async function deleteExpense(event, ExpenseId) {
     }
 
     const response = await axios.delete(
-      `http://44.209.180.175/users/deleteExpense/${ExpenseId}`,
+      `http://44.209.180.175:5001/users/deleteExpense/${ExpenseId}`,
       {
         headers: {
           Authorization: token,
@@ -128,7 +128,7 @@ async function deleteExpense(event, ExpenseId) {
 document.getElementById("Premium").addEventListener("click", async (e) => {
   try {
     const response = await axios.get(
-      "http://44.209.180.175/api/purchaseMember",
+      "http://44.209.180.175:5001/api/purchaseMember",
       { headers: { Authorization: token } }
     );
     console.log(response);
@@ -138,7 +138,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
       handler: async function (response) {
         try {
           const res = await axios.post(
-            "http://44.209.180.175/api/updatetransactionstatus",
+            "http://44.209.180.175:5001/api/updatetransactionstatus",
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
@@ -162,7 +162,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const res = await axios.post(
-          "http://44.209.180.175/api/updatetransactionstatus",
+          "http://44.209.180.175:5001/api/updatetransactionstatus",
           {
             order_id: options.order_id,
             payment_failed: true,
@@ -207,7 +207,7 @@ async function showLeadBoard() {
         const li = document.createElement("li");
 
         const response = await axios.get(
-          "http://44.209.180.175/api/premium/usersLeaderBoard",
+          "http://44.209.180.175:5001/api/premium/usersLeaderBoard",
           { headers: { Authorization: token } }
         );
         const listOfUsers = response.data;
@@ -250,7 +250,7 @@ async function expenseTable() {
 async function getcurrPage(currentPage,limit) {
   try {
     const response = await axios.get(
-      `http://44.209.180.175/expense/pagination?page=${currentPage}&limit=${limit}`,
+      `http://44.209.180.175:5001/expense/pagination?page=${currentPage}&limit=${limit}`,
       { headers: { Authorization: token } }
     );
     const ul = document.getElementById("listOfExpense");

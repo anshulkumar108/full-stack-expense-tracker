@@ -21,7 +21,7 @@ const forgotpassword=require('./router/forgetPassward');
 const compression=require('compression');
 // const morgan=require('morgan')// it is use to collect log details 
 
-const Port=process.env.PORT|| 5000;
+const Port=process.env.PORT|| 5001;
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ extended: false }));
