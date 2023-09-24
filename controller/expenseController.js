@@ -29,7 +29,7 @@ const addExpense = async (req, res, next) => {
       userdetailId: req.user.id,
       authenticate,
     });
-    // console.log('/////////',req.user,'\\\\\\\\')
+
     try {
       const totalAmount =
         Number(req.user.total_Expense) + Number(PostData.amount);
@@ -37,7 +37,7 @@ const addExpense = async (req, res, next) => {
         { total_Expense: totalAmount },
         { where: { id: req.user.id }, transaction: t }
       );
-      //   console.log(">>>>",totalAmount ,">>>>>.")
+
       await t.commit();
       res.status(201).json({ PostData });
     } catch (error) {
@@ -56,7 +56,7 @@ const fetchExpense = async (req, res, next) => {
       where: { userdetailId: req.user.id },
     });
     res.status(201).json({ Details });
-    // console.log(Details)
+
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "failed to fetch details" });
@@ -67,7 +67,7 @@ const deleteExpense = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
     const userId = req.params.id;
-    // console.log(userId);
+
 
     if (userId === undefined || userId.length === 0) {
       return res
@@ -88,7 +88,6 @@ const deleteExpense = async (req, res, next) => {
       },
     });
 
-    // console.log("responseses>>>>>", responseses, "<<<<<<<<<responseses");
     const totalAmount =
       req.user.total_Expense - responseses[0].dataValues.amount;
     // console.log("req.user.total_Expense",req.user.total_Expense);//total expense amount
@@ -104,12 +103,11 @@ const deleteExpense = async (req, res, next) => {
           transaction: t,
         }
       );
-      // console.log(" update>>>>>", update);
+
       if (response === 0) {
         await t.rollback();
         res.status(500).json({ message: "you are not authorized user" });
       } else {
-        // console.log(response)
         await t.commit();
         return res
           .status(201)
@@ -121,13 +119,12 @@ const deleteExpense = async (req, res, next) => {
     }
   } catch (error) {
     await t.rollback();
-    // const response = await Expense.destroy({ where:{ userdetailId: req.user.id } ,transaction:t});
     console.log(error);
   }
 };
 
 if (!BUCKET_NAME || !IAM_USER_KEY || !IAM_USER_SECRET) {
-  // console.error("Required environment variables are missing.");
+
   process.exit(1);
 }
 
@@ -159,10 +156,8 @@ async function uploadToS3(data, fileName) {
   };
   try {
     const uploadResult = await s3.send(new PutObjectCommand(params));
-    console.log("File uploaded successfully:", uploadResult);
     return uploadResult;
   } catch (error) {
-    // console.error("Error uploading to S3:", error);
     throw error;
   }
 }
@@ -188,14 +183,12 @@ const expensedownload = async (req, res) => {
       await fileUrls.create(obj);
       // Construct the S3 URL based on your bucket and filename
       const fileUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${fileName}${new Date().getTime()}`;
-      console.log(fileUrl);
       res.status(200).json({ url, success: true });
     } catch (error) {
       console.error("Error in downloadExpense:", error);
       res.status(500).json({ error: " server error" });
     }
   } catch (error) {
-    // console.error("Error in downloadExpense:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -215,13 +208,10 @@ const getExpenseOnPage = async (req, res, next) => {
   try {
 
     const {page,limit}=req.query
-  //  let startIndex=(parseInt(page) - 1) * parseInt(limit)
-  //  let lastIndex=parseInt(page)* parseInt(limit)
 
     if (!page || !Number.isInteger(parseInt(page)) || parseInt(page) < 1) {
       return res.status(400).json({ error: "Invalid page parameter" });
     }
-
 
     const queries={
       offset: (page - 1) * parseInt(limit),

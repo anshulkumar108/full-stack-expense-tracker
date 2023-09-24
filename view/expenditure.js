@@ -6,7 +6,7 @@ const ul = document.querySelector('ul');
 
 let currentPage = 1;
 let limit=document.getElementById("pages").value
-console.log(limit)
+
 
 document.getElementById("pages").addEventListener('change',()=>{
   const newLimit = document.getElementById("pages").value;
@@ -58,7 +58,7 @@ document.getElementById("submit").addEventListener("click", async (e) => {
   try {
     const token = localStorage.getItem("accessToken");
     const response = await axios.post(
-      "http://44.209.180.175:5001/users/addExpense",
+      "http://localhost:5001/users/addExpense",
       ExpenseDetails,
       {
         headers: {
@@ -79,11 +79,9 @@ async function fetchExpenseList(expensedetails) {
     const ul = document.getElementById("listOfExpense");
 
     const ExpenseId = expensedetails.id;
-    console.log(ExpenseId);
     ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
               <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>
               </li>`;
-              console.log(ul.innerHTML);
   } catch (error) {
     console.log(error);
   }
@@ -93,18 +91,16 @@ async function deleteExpense(event, ExpenseId) {
   let expenseElement = event.target.parentElement;
   try {
     if (ExpenseId === undefined) {
-      console.error("Expense ID is missing");
       return;
     }
 
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      console.error("Access token is missing");
       return;
     }
 
     const response = await axios.delete(
-      `http://44.209.180.175:5001/users/deleteExpense/${ExpenseId}`,
+      `http://localhost:5001/users/deleteExpense/${ExpenseId}`,
       {
         headers: {
           Authorization: token,
@@ -128,24 +124,22 @@ async function deleteExpense(event, ExpenseId) {
 document.getElementById("Premium").addEventListener("click", async (e) => {
   try {
     const response = await axios.get(
-      "http://44.209.180.175:5001/api/purchaseMember",
+      "http://localhost:5001/api/purchaseMember",
       { headers: { Authorization: token } }
     );
-    console.log(response);
     const options = {
       key: response.data.key_id,
       order_id: response.data.order.id,
       handler: async function (response) {
         try {
           const res = await axios.post(
-            "http://44.209.180.175:5001/api/updatetransactionstatus",
+            "http://localhost:5001/api/updatetransactionstatus",
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
             },
             { headers: { Authorization: token } }
           );
-          console.log(res);
           alert("You are a Premium User Now");
           localStorage.setItem("isPremium", "true");
           checkAndDisplayPremiumMessage();
@@ -162,15 +156,13 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const res = await axios.post(
-          "http://44.209.180.175:5001/api/updatetransactionstatus",
+          "http://localhost:5001/api/updatetransactionstatus",
           {
             order_id: options.order_id,
             payment_failed: true,
           },
           { headers: { Authorization: token } }
         );
-
-        console.log(res);
         alert("Something went wrong");
       } catch (error) {
         console.log(error);
@@ -207,7 +199,7 @@ async function showLeadBoard() {
         const li = document.createElement("li");
 
         const response = await axios.get(
-          "http://44.209.180.175:5001/api/premium/usersLeaderBoard",
+          "http://localhost:5001/api/premium/usersLeaderBoard",
           { headers: { Authorization: token } }
         );
         const listOfUsers = response.data;
@@ -234,7 +226,6 @@ async function expenseTable() {
     "http://localhost:5000/api/downloadFile/ExpenseDetails",
     { headers: { Authorization: token } }
   );
-  console.log("expenseTable", response.data.url);
   try {
     var a = document.createElement("a");
     a.href = response.data.url;
@@ -250,7 +241,7 @@ async function expenseTable() {
 async function getcurrPage(currentPage,limit) {
   try {
     const response = await axios.get(
-      `http://44.209.180.175:5001/expense/pagination?page=${currentPage}&limit=${limit}`,
+      `http://localhost:5001/expense/pagination?page=${currentPage}&limit=${limit}`,
       { headers: { Authorization: token } }
     );
     const ul = document.getElementById("listOfExpense");
@@ -264,8 +255,6 @@ async function getcurrPage(currentPage,limit) {
       <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>`;
     ul.appendChild(li);
     });
-
-    console.log("total pages are"+response.data.totalPages )
   
     elem(response.data.totalPages, response.data.page)
 

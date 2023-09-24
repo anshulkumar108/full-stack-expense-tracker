@@ -41,7 +41,6 @@ const Usersignup = async (req, res, next) => {
  
 
 function generateAccessToken(id,name,ispremiumUser) {
-  console.log("token",id,name,ispremiumUser);
   return jwt.sign({ userId: id,name:name,ispremiumUser }, process.env.JWT_SECRET_KEY);
 }
 
@@ -53,7 +52,7 @@ const Usersignin = async (req, res, next) => {
   try {
 
     const existingUser = await User.findOne({ where: { email: Email } });
-    console.log("////////",existingUser)
+
     if (!existingUser) {
       res.status(404).json({ message: 'Email ID does not exist' })
     }
@@ -69,7 +68,6 @@ const Usersignin = async (req, res, next) => {
 
     res.status(201).json({ user: existingUser, token: token })
     console.log("you log in successful")
-
 
   }catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });

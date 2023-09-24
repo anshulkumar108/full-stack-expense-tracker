@@ -20,9 +20,8 @@ loginForm.addEventListener('submit', async (e) => {
         clearInput();
         try {
             //   const response = await axios.post('http://44.209.180.175:5001/signin', SigninDetails);
-            const response = await axios.post('http://44.209.180.175:5001/signin', SigninDetails);
+            const response = await axios.post('http://localhost:5001/signin', SigninDetails);
             const token = response.data.token;
-            console.log(token)
             localStorage.setItem('accessToken', token);
             if (response.status == 201) {
                 window.location.href = "/expenditure.html"
@@ -56,10 +55,9 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async (e
     const forgetUserDetails = {
         Email: document.getElementById('resetEmail').value,
     };
-    console.log(forgetUserDetails);
 
     try {
-        const response = await axios.post('http://44.209.180.175:5001/api/password/forgotpassword', forgetUserDetails);
+        const response = await axios.post('http://localhost:5001/api/password/forgotpassword', forgetUserDetails);
         console.log(response.data); // Handle the response data as needed
     } catch (error) {
         console.error(error);

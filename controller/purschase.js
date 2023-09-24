@@ -9,11 +9,11 @@ const purchaseMemberShip = async (req, res) => {
         currency: "INR"
     }
     const order = await rzp.orders.create(options);
-    // console.log("order>>>>>>>>>", order)
+   
     //till now order is created
     try {
         const response = await Order.create({ orderid: order.id, status: 'PENDING', userdetailId: req.user.id })
-        // console.log(response)
+    
         res.status(201).json({ order, key_id: rzp.key_id })
     } catch (error) {
         console.log(error);
@@ -30,12 +30,11 @@ const updatetransactionstatus = async (req, res) => {
                 { orderId: order_id,status: "fail" },
                 { where: { orderId: order_id } }
             );
-            // console.log("failure>>>>>",failure);
             await User.update(
                 { isPremimum: false },
                 { where: { id: req.user.id } }
             );
-            console.log("Transaction marked as failed due to payment failure");
+         
         } else {
             await Order.update(
                 { paymentId: payment_id, orderId: order_id, status: "successful" },
@@ -45,7 +44,7 @@ const updatetransactionstatus = async (req, res) => {
                 { isPremimum: true },
                 { where: { id: req.user.id } }
             );
-            console.log("Transaction and user details updated successfully",user);
+           
         }
 
         res.status(202).json({ success: true, message: "Transaction status updated" });

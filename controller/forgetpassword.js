@@ -7,7 +7,7 @@ const ForgotpasswordRequest = require("../model/ForgotPasswordRequests");
 const forgotpassword = async (req, res) => {
   try {
     const {Email} = req.body;
-    // console.log("email",Email)
+
     const user = await User.findOne({ where: { email: Email} });
     const newid = uuid.v4();
     if (user) {
@@ -17,7 +17,7 @@ const forgotpassword = async (req, res) => {
         userdetailId: user.id,
       };
       let newobj = await ForgotpasswordRequest.create(obj);
-      // console.log(newobj);
+
     } else {
       return res.status(500).json({
         message: "No account registered with this mail id",
@@ -33,7 +33,7 @@ const forgotpassword = async (req, res) => {
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-    // console.log(process.env.EMAIL, process.env.EMAIL_PASSWORD);
+
 
     const mailoptions = {
       from: process.env.EMAIL,
@@ -46,10 +46,10 @@ const forgotpassword = async (req, res) => {
        http://localhost:5000/api/password/resetpassword/${newid}
        </a>`,
     };
-    // console.log(mailoptions);
+
     transporter.sendMail(mailoptions, function (error, info) {
       if (error) {
-        console.log(error);
+   
         res.status(500).json({ message: "can not send email", success: false });
       } else {
         res
@@ -64,7 +64,7 @@ const forgotpassword = async (req, res) => {
 
 const resetpassword = async (req, res) => {
   const { id } = req.params;
-  // console.log(id);
+
   try {
     const uuid = await ForgotpasswordRequest.findOne({ where: { id: id } });
     if (uuid.id === id) {
@@ -94,8 +94,8 @@ const resetpassword = async (req, res) => {
 
     console.log( resetpassword);
     try {
-        const response = await axios.post('http://localhost:5000/api/password/updatepassword/${id}',resetpassword);
-        console.log(response.data); // Handle the response data as needed
+        const response = await axios.post('http://localhost:5001/api/password/updatepassword/${id}',resetpassword);
+       
         if(res.status==200){
           window.location.href = './signin.html';
         }
@@ -115,24 +115,23 @@ const resetpassword = async (req, res) => {
 };
 
 const updatepassword = async(req, res) => {
-  // console.log("resetpassword");
+  
   try {
     const { newPassword } = req.body;
     const { resetpasswordid } = req.params;
-    // console.log(resetpasswordid);
-    // console.log(newPassword);
+
 
     try {
       const user=await ForgotpasswordRequest.findOne({ where : { id: resetpasswordid }})
-      // console.log("<<<<<<<<<<<<<<<<<<<<",user);
+  
       const newUserPaword=await User.findOne({where:{id:user.userdetailId}})
-      // console.log("/////////////",newUserPaword);
+ 
        if(newUserPaword){
         if(user) {
           //encrypt the password
           let saltRounds=10;
           const newHashedPassword=await bcrypt.hash(newPassword,saltRounds);
-          // console.log(newHashedPassword);
+    
           User.update({password:newHashedPassword},{where:{id:newUserPaword.id}});
           res.status(200).json({ newHashedPassword,message:"password changed successfully" });
         }else{
