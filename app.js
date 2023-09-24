@@ -57,6 +57,7 @@ Order.belongsTo(User)
 User.hasMany(ForgetPassword)
 ForgetPassword.belongsTo(User);
 
+
 sequelize.sync().then((result) => {
     app.listen(Port);
 }).catch((err) => {

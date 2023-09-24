@@ -20,7 +20,7 @@ document.getElementById('signUpForm').addEventListener('submit', async (e) => {
             const response = await axios.post('http://44.209.180.175:5001/signup', SignupDetails)
             console.log(response);
             if (response.status === 201) {
-                window.location.href = './Signin.html';
+                window.location.href = '/Signin.html';
             } else {
                 alert('Email is already registered.');
                 console.log(error);
