@@ -10,7 +10,7 @@ router.post('/updatetransactionstatus',userauthenticate,purchaseController.updat
 router.route('/update').post(purchaseController.purchaseMemberShip);
 
 router.get('/downloadFile/ExpenseDetails',userauthenticate,download.expensedownload);
-
+router.get('/premiumUser',userauthenticate,download.premiumUserVerification)
 
 
 module.exports = router;

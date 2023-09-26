@@ -1,15 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const path=require('path');
 
 const userController = require('../controller/User.js')
 const expenditureController = require('../controller/expenseController');
 const {userauthenticate} = require('../middleware/auth.js');
 
 
+router.get('/',(req,res)=>{
+    res.sendFile(path.join(__dirname,'../view/signin.html'))
+})
 
 //user  signin and singup routes
-router.post('/signup',userController.Usersignup);
-// router.get('/signup',userController.Usersignup);
+router.post('/signUp',userController.Usersignup);
 router.post('/signin',userController.Usersignin)
 
 //expense controller routes

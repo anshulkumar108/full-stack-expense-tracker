@@ -232,12 +232,21 @@ const getExpenseOnPage = async (req, res, next) => {
     console.log(error);
   }
 };
+
+const premiumUserVerification= async (req,res)=>{
+ const UserPremium=await User.findOne({where: {
+ id: req.user.id
+}})
+res.send(UserPremium)
+}
+
 module.exports = {
   addExpense,
   fetchExpense,
   deleteExpense,
   expensedownload,
   getExpenseOnPage,
+  premiumUserVerification
 };
 
 // In Sequelize, the offset and limit methods are usually used for pagination directly on the query,

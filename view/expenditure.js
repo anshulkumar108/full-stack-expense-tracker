@@ -33,9 +33,12 @@ function parseJwt(token) {
 window.addEventListener("DOMContentLoaded", async () => {
   getcurrPage(currentPage,limit)
   const token = localStorage.getItem("accessToken");
-  const decodedToken = parseJwt(token);
-  const isPremium = decodedToken.ispremiumUser;
-  if (isPremium === true) {
+  const response=await axios.get('http://localhost:5001/api/premiumUser',{
+    headers: {
+      Authorization: token,
+    },
+  })
+  if (response.data.isPremimum === true) {
     checkAndDisplayPremiumMessage();
     showLeadBoard();
   }
@@ -49,7 +52,6 @@ function cleanInputText() {
 
 document.getElementById("submit").addEventListener("click", async (e) => {
   e.preventDefault();
-
   const ExpenseDetails = {
     Amount: amount.value,
     Description: description.value,
@@ -218,12 +220,10 @@ async function showLeadBoard() {
     }
   };
 }
-document.getElementById("downloadexpense").addEventListener('click',expenseTable)
 
-
-async function expenseTable() {
+document.getElementById("downloadexpense").addEventListener('click',async ()=>{
   const response = await axios.get(
-    "http://localhost:5000/api/downloadFile/ExpenseDetails",
+    "http://localhost:5001/api/downloadFile/ExpenseDetails",
     { headers: { Authorization: token } }
   );
   try {
@@ -234,9 +234,8 @@ async function expenseTable() {
   } catch (error) {
     console.log(error);
   }
-}
-
-
+})
+  
 
 async function getcurrPage(currentPage,limit) {
   try {

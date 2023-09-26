@@ -16,10 +16,10 @@ document.getElementById('signUpForm').addEventListener('submit', async (e) => {
         };
         clearInput();
         try {
-            const response = await axios.post('http://localhost:5001/signup', SignupDetails)
+            const response = await axios.post('http://localhost:5001/SignUp', SignupDetails)
             console.log(response);
             if (response.status === 201) {
-                window.location.href = '/Signin.html';
+                window.location.href="./signin.html"
             } else {
                 alert('Email is already registered.');
             }
