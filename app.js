@@ -34,6 +34,9 @@ app.use(compression());
 
 
 // Routes
+app.get('/',(req,res)=>{
+  res.sendFile(path.join(__dirname,'view/signin.html'))
+})
 app.use('/', expenseRoutes);
 app.use('/api', purchaseRoute);
 app.use('/api/premium', premium);

@@ -7,10 +7,6 @@ const expenditureController = require('../controller/expenseController');
 const {userauthenticate} = require('../middleware/auth.js');
 
 
-router.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'../view/signin.html'))
-})
-
 //user  signin and singup routes
 router.post('/signUp',userController.Usersignup);
 router.post('/signin',userController.Usersignin)
