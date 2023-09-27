@@ -6,11 +6,13 @@ BUCKET_NAME=expenseapp108
  IAM_USER_KEY=AKIAXPDYRH3454TFSFWM
  IAM_USER_SECRET=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
  REGION=us-east-1
+
 JWT_SECRET_KEY=secret
 
 DB_NAME=expense
 DB_USER=princeDataBase
 DB_PASSWORD=princeDataBase
 DB_HOST=database-2.catrxqcwws2j.us-east-1.rds.amazonaws.com
+
 
 

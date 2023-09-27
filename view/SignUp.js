@@ -16,7 +16,7 @@ document.getElementById('signUpForm').addEventListener('submit', async (e) => {
         };
         clearInput();
         try {
-            const response = await axios.post('http://localhost:5001/SignUp', SignupDetails)
+            const response = await axios.post('http://localhost:5001/user/SignUp', SignupDetails)
             console.log(response);
             if (response.status === 201) {
                 window.location.href="./signin.html"

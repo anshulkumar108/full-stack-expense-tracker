@@ -24,7 +24,7 @@ loginForm.addEventListener('submit', async (e) => {
         clearInput();
         try {
             //   const response = await axios.post('http://44.209.180.175:5001/signin', SigninDetails);
-            const response = await axios.post('http://localhost:5001/Signin', SigninDetails);
+            const response = await axios.post('http://localhost:5001/user/Signin', SigninDetails);
             const token = response.data.token;
             localStorage.setItem('accessToken', token);
             if (response.status == 201) {

@@ -34,10 +34,11 @@ app.use(compression());
 
 
 // Routes
-app.get('/',(req,res)=>{
+app.get('/',(req,res,next)=>{
   res.sendFile(path.join(__dirname,'view/signin.html'))
 })
-app.use('/', expenseRoutes);
+
+app.use('/user', expenseRoutes);
 app.use('/api', purchaseRoute);
 app.use('/api/premium', premium);
 app.use('/api', forgotpassword);
