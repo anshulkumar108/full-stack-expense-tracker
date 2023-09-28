@@ -33,7 +33,7 @@ function parseJwt(token) {
 window.addEventListener("DOMContentLoaded", async () => {
   getcurrPage(currentPage,limit)
   const token = localStorage.getItem("accessToken");
-  const response=await axios.get('http://localhost:5001/api/premiumUser',{
+  const response=await axios.get('http://44.209.180.175/api/premiumUser',{
     headers: {
       Authorization: token,
     },
@@ -60,7 +60,7 @@ document.getElementById("submit").addEventListener("click", async (e) => {
   try {
     const token = localStorage.getItem("accessToken");
     const response = await axios.post(
-      "http://localhost:5001/users/addExpense",
+      "http://44.209.180.175/users/addExpense",
       ExpenseDetails,
       {
         headers: {
@@ -68,26 +68,13 @@ document.getElementById("submit").addEventListener("click", async (e) => {
         },
       }
     );
-    fetchExpenseList(response.data.PostData);
+    getcurrPage(currentPage,limit)
+    userExpenseTotal();
     cleanInputText();
   } catch (error) {
     console.log(error);
   }
 });
-
-async function fetchExpenseList(expensedetails) {
-  try {
-   
-    const ul = document.getElementById("listOfExpense");
-
-    const ExpenseId = expensedetails.id;
-    ul.innerHTML += `<li id=${ExpenseId}>  ${expensedetails.amount} ${expensedetails.description} ${expensedetails.category} 
-              <button onclick='deleteExpense(event,${ExpenseId})'>DELETE EXPENSE</button>
-              </li>`;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 async function deleteExpense(event, ExpenseId) {
   let expenseElement = event.target.parentElement;
@@ -102,7 +89,7 @@ async function deleteExpense(event, ExpenseId) {
     }
 
     const response = await axios.delete(
-      `http://localhost:5001/users/deleteExpense/${ExpenseId}`,
+      `http://44.209.180.175/users/deleteExpense/${ExpenseId}`,
       {
         headers: {
           Authorization: token,
@@ -126,7 +113,7 @@ async function deleteExpense(event, ExpenseId) {
 document.getElementById("Premium").addEventListener("click", async (e) => {
   try {
     const response = await axios.get(
-      "http://localhost:5001/api/purchaseMember",
+      "http://44.209.180.175/api/purchaseMember",
       { headers: { Authorization: token } }
     );
     const options = {
@@ -135,7 +122,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
       handler: async function (response) {
         try {
           const res = await axios.post(
-            "http://localhost:5001/api/updatetransactionstatus",
+            "http://44.209.180.175/api/updatetransactionstatus",
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
@@ -158,7 +145,7 @@ document.getElementById("Premium").addEventListener("click", async (e) => {
     rzp1.on("payment.failed", async function (response) {
       try {
         const res = await axios.post(
-          "http://localhost:5001/api/updatetransactionstatus",
+          "http://44.209.180.175/api/updatetransactionstatus",
           {
             order_id: options.order_id,
             payment_failed: true,
@@ -186,44 +173,47 @@ async function showLeadBoard() {
   leaderBoard.innerText = "Show LeaderBoard";
   document.getElementById("message").appendChild(leaderBoard);
 
-  let leaderboardShown = false;
+  const h3 = document.createElement("h3");
+  h3.innerText = " Expense leadBoard of all Users";
+  document.getElementById("LeaderBoard").appendChild(h3);
 
+  let leaderboardShown = false;
   leaderBoard.onclick = async (e) => {
     e.preventDefault();
     if (!leaderboardShown) {
       // Check if the leaderboard is not already shown
-      const token = localStorage.getItem("accessToken");
-      try {
-        const h3 = document.createElement("h3");
-        h3.innerText = " Expense leadBoard of all Users";
-        document.getElementById("LeaderBoard").appendChild(h3);
-
-        const li = document.createElement("li");
-
-        const response = await axios.get(
-          "http://localhost:5001/api/premium/usersLeaderBoard",
-          { headers: { Authorization: token } }
-        );
-        const listOfUsers = response.data;
-        listOfUsers.forEach((element) => {
-          li.innerHTML += `<li>Name:${element.name} TOTAL Expenses:${element.total_Expense}</li>`;
-        });
-        document.getElementById("expenseboard").appendChild(li);
-        document
-          .getElementById("LeaderBoard")
-          .appendChild(document.getElementById("expenseboard"));
-
-        leaderboardShown = true; // Set the flag to true after showing the leaderboard
-      } catch (error) {
-        console.log(error);
-      }
+     await userExpenseTotal();
     }
   };
 }
 
+async function userExpenseTotal(){
+  try {
+    document.getElementById("expenseboard").innerHTML='';
+    const li = document.createElement("li");
+
+    const response = await axios.get(
+      "http://44.209.180.175/api/premium/usersLeaderBoard",
+      { headers: { Authorization: token } }
+    );
+    const listOfUsers = response.data;
+    listOfUsers.forEach((element) => {
+      li.innerHTML += `<li>Name:${element.name} TOTAL Expenses:${element.total_Expense}</li>`;
+    });
+    document.getElementById("expenseboard").appendChild(li);
+    document
+      .getElementById("LeaderBoard")
+      .appendChild(document.getElementById("expenseboard"));
+
+    leaderboardShown = true; 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 document.getElementById("downloadexpense").addEventListener('click',async ()=>{
   const response = await axios.get(
-    "http://localhost:5001/api/downloadFile/ExpenseDetails",
+    "http://44.209.180.175/api/downloadFile/ExpenseDetails",
     { headers: { Authorization: token } }
   );
   try {
@@ -240,7 +230,7 @@ document.getElementById("downloadexpense").addEventListener('click',async ()=>{
 async function getcurrPage(currentPage,limit) {
   try {
     const response = await axios.get(
-      `http://localhost:5001/expense/pagination?page=${currentPage}&limit=${limit}`,
+      `http://44.209.180.175/expense/pagination?page=${currentPage}&limit=${limit}`,
       { headers: { Authorization: token } }
     );
     const ul = document.getElementById("listOfExpense");

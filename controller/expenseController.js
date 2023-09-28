@@ -222,7 +222,8 @@ const getExpenseOnPage = async (req, res, next) => {
       where: {
         userdetailId: req.user.id
       },
-      ...queries
+      ...queries,
+      order: [['id', 'DESC']]
     });
 
     let totalPages=Math.ceil(result.count/limit);

@@ -32,13 +32,16 @@ app.use(express.static(path.join(__dirname,'view')));
 app.use(cors());
 app.use(compression());
 
-
+app.get('/test',(req,res)=>{
+  res.send('connection successful')
+})
 // Routes
 app.get('/',(req,res,next)=>{
-  res.sendFile(path.join(__dirname,'view/signin.html'))
+  console.log(req.url)
+  res.sendFile(path.join(__dirname,`view/${req.url}.html`))
 })
 
-app.use('/user', expenseRoutes);
+app.use('/', expenseRoutes);
 app.use('/api', purchaseRoute);
 app.use('/api/premium', premium);
 app.use('/api', forgotpassword);

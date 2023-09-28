@@ -24,7 +24,7 @@ loginForm.addEventListener('submit', async (e) => {
         clearInput();
         try {
             //   const response = await axios.post('http://44.209.180.175:5001/signin', SigninDetails);
-            const response = await axios.post('http://localhost:5001/user/Signin', SigninDetails);
+            const response = await axios.post('http://44.209.180.175/signin', SigninDetails);
             const token = response.data.token;
             localStorage.setItem('accessToken', token);
             if (response.status == 201) {
@@ -61,7 +61,7 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async (e
     };
 
     try {
-        const response = await axios.post('http://localhost:5001/api/password/forgotpassword', forgetUserDetails);
+        const response = await axios.post('http://44.209.180.175/api/password/forgotpassword', forgetUserDetails);
          // Handle the response data as needed
     } catch (error) {
         console.error(error);

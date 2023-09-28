@@ -42,8 +42,8 @@ const forgotpassword = async (req, res) => {
       text: "hi welcome",
       html: `
       <p> click on link to reset password </p>
-      <a href="http://localhost:5000/api/password/resetpassword/${newid}">
-       http://localhost:5000/api/password/resetpassword/${newid}
+      <a href="http://44.209.180.175/api/password/resetpassword/${newid}">
+      http://44.209.180.175/api/password/resetpassword/${newid}
        </a>`,
     };
 
@@ -94,7 +94,7 @@ const resetpassword = async (req, res) => {
 
     console.log( resetpassword);
     try {
-        const response = await axios.post('http://localhost:5001/api/password/updatepassword/${id}',resetpassword);
+        const response = await axios.post('http://44.209.180.175/api/password/updatepassword/${id}',resetpassword);
        
         if(res.status==200){
           window.location.href = './signin.html';
